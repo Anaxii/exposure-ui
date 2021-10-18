@@ -84,10 +84,11 @@
       </div>
 
       <div v-bind:style="{'width': minorWidth}"
+           v-if="size !== 'medium' && size !== 'small'"
            style="margin-left: auto;margin-right:auto;padding-bottom: 15px; margin-top: 10vh">
         <h2 class="head" v-bind:style="{'font-size': headerSize}" style="text-align: center !important;">Decentralized
           ETF creation.</h2>
-        <div style="width: 90%; margin-right: auto; margin-left: auto">
+        <div style="width: 90%; margin-right: auto; margin-left: auto" >
           <img st src="../assets/images/explainer1.jpeg" style="width: 45vw;margin-right: auto; margin-left: auto"/>
         </div>
       </div>
@@ -95,7 +96,7 @@
            style="margin-left: auto;margin-right:auto;padding-bottom: 15px; margin-top: 10vh">
         <h2 class="head" v-bind:style="{'font-size': headerSize}" style="text-align: center !important;">
           Automated Management.</h2>
-        <p class="featureTitledeep">
+        <p class="featureTitledeep" v-bind:style="{'font-size': featureSize}" style="max-width: 70%;">
           Exposure ETFs are automatically rebalanced to the weights set by the dRISK DAO. The weights may only be adjusted by
           the DAO after a vote by token holders.
         </p>
@@ -111,7 +112,7 @@
             <div style="width: 90%; margin-left: auto;margin-right: auto;">
               <div class="featuredeep">
                 <img src="../assets/icons/white_logo.png" style="height: 30px"/>
-                <p class="featureTitledeep"><strong>DCA into a basket of crypto with minimal effort.</strong></p>
+                <p class="featureTitledeep">DCA into a basket of crypto with minimal effort.</p>
               </div>
             </div>
             <div style="width: 90%; margin-left: auto;margin-right: auto;">
@@ -140,12 +141,12 @@
            style="margin-left: auto;margin-right:auto;padding-bottom: 15px; margin-top: 10vh">
         <h2 class="head" v-bind:style="{'font-size': headerSize}" style="text-align: center !important;">The Exposure
           Portal.</h2>
-        <h3 class="subhead" style="text-align: center !important;">
+        <h3 class="subhead" v-bind:style="{'font-size': featureSize}" style="text-align: center !important;">
           The Exposure Portal makes purchasing a crypto ETF easy. To get started, all you need is a Solana wallet,
           some Solana, and a desire to get involved in the cryptocurrency market.
           <br/>
           <br/>
-          <div style="border: 1px solid white;">
+          <div style="border: 1px solid white;" v-if="size !== 'medium' && size !== 'small'">
             <img src="../assets/images/exposureportal.png" style="width: 90%"/>
           </div>
         </h3>
@@ -245,11 +246,13 @@ export default Vue.extend({
     if (window.innerWidth < 800) {
       this.size = 'small'
       this.minorWidth = '90%'
-      this.headerSize = '30px'
+      this.headerSize = '5vw'
       this.mainWidth = '100%'
-      this.featureSize = '14px'
-    } else if (window.innerWidth < 1500) {
+      this.minorWidth = "97.5%"
+      this.featureSize = '2vw'
+    } else if (window.innerWidth < 1200) {
       this.size = 'medium'
+      this.minorWidth = "90%"
     } else {
       this.size = 'large'
     }
@@ -497,7 +500,7 @@ a {
 
 
   .subhead {
-    font-size: 15px !important;
+    //font-size: 15px !important;
     padding-bottom: 20px;
   }
 
@@ -529,10 +532,6 @@ a {
 
   .infoDiv {
     width: 100%;
-  }
-
-  .subhead {
-    font-size: 20px;
   }
 
   .total {

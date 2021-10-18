@@ -12,11 +12,11 @@
             investors get together to discuss the latest projects and ETFs on Solana.</h2>
 
         </div>
-        <div
-            style="display: flex; flex-direction: row;margin-top: 35px; width: 50%;margin-left: auto;margin-right: auto; margin-bottom: 10vh;">
+        <div v-if="size != 'small'"
+             style="display: flex; flex-direction: row;margin-top: 35px; width: 50%;margin-left: auto;margin-right: auto; margin-bottom: 10vh;">
           <div class="feature">
             <p class="featureTitle"><strong>See the latest news</strong></p>
-            <div style="width: 75%;margin-left: auto;margin-right: auto;border-radius: 15px; margin-top: 2.5vh">
+            <div style="width: 75%;margin-left: auto;margin-right: auto;border-radius: 15px; margin-top: 2.5vh; padding-bottom: 5vh">
               <a href="https://twitter.com/ExposureFi" target="_blank">
                 <button class="arrowbtn">Twitter</button>
               </a>
@@ -24,22 +24,49 @@
           </div>
           <div class="feature">
             <p class="featureTitle"><strong>Meet the community</strong></p>
-            <div style="width: 75%;margin-left: auto;margin-right: auto;border-radius: 15px; margin-top: 2.5vh">
+            <div style="width: 75%;margin-left: auto;margin-right: auto;border-radius: 15px; margin-top: 2.5vh; padding-bottom: 5vh">
               <a href="https://t.me/exposurefi" target="_blank">
                 <button class="arrowbtn">Telegram</button>
               </a>
             </div>
           </div>
-          <div class="feature">
+          <div class="feature"">
             <p class="featureTitle"><strong>Deep dive articles</strong></p>
-            <div style="width: 75%;margin-left: auto;margin-right: auto;border-radius: 15px; margin-top: 2.5vh">
+            <div style="width: 75%;margin-left: auto;margin-right: auto;border-radius: 15px; margin-top: 2.5vh; padding-bottom: 5vh">
               <a href="https://exposurefi.medium.com/" target="_blank">
                 <button class="arrowbtn">Medium</button>
               </a>
             </div>
           </div>
         </div>
-        <div style="background-color: #e3e3ea;height: 50vh;">
+        <div v-else
+             style="display: flex; flex-direction: row;margin-top: 35px; width: 90%;margin-left: auto;margin-right: auto; ">
+          <div class="feature" style="padding-top: 0 !important; height: border-box !important;">
+            <p class="featureTitle" v-if="size != 'small'"><strong>See the latest news</strong></p>
+            <div style="width: 100%;margin-left: auto;margin-right: auto; margin-top: 0.5vh" >
+              <a href="https://twitter.com/ExposureFi" target="_blank">
+                <button class="arrowbtn" style="border: none !important">Twitter</button>
+              </a>
+            </div>
+          </div>
+          <div class="feature" style="padding-top: 0 !important; height: border-box !important;">
+            <p class="featureTitle" v-if="size != 'small'"><strong>Meet the community</strong></p>
+            <div style="width: 100%;margin-left: auto;margin-right: auto; margin-top: 0.5vh">
+              <a href="https://t.me/exposurefi" target="_blank">
+                <button class="arrowbtn" style="border: none !important">Telegram</button>
+              </a>
+            </div>
+          </div>
+          <div class="feature" style="padding-top: 0 !important">
+            <p class="featureTitle" v-if="size != 'small'"><strong>Deep dive articles</strong></p>
+            <div style="width: 100%;margin-left: auto;margin-right: auto; margin-top: 0.5vh">
+              <a href="https://exposurefi.medium.com/" target="_blank">
+                <button class="arrowbtn" style="border: none !important">Medium</button>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div style="background-color: #e3e3ea;height: 50vh;" v-if="size != 'small'">
           <div v-bind:style="{'width': minorWidth}"
                style="margin-left: auto;margin-right:auto;padding-bottom: 15px; padding-top: 5vh">
             <div>
@@ -254,7 +281,6 @@ a:hover {
   border: 3px solid white;
   transition: all .35s;
   box-shadow: 0 4px 6px -6px #a5a5a5;
-  height: 15vh;
 }
 
 .feature:hover {

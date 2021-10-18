@@ -28,10 +28,10 @@
             exposure to the overall cryptocurrency market. All shares are mintable, redeemable, tradeable, and represent
             real underlying assets.
           </h3>
-          <div style="width: 25%;margin-right: auto;border-radius: 15px">
-            <button class="arrowbtn" @click="nav('/connect')">Launch App</button>
+          <div style="width: 25%;margin-right: auto;border-radius: 15px" v-if="size != 'small'">
+            <button class="arrowbtn" style="cursor: not-allowed">Coming Soon</button>
           </div>
-          <div style="width: 50%; margin-left: auto; margin-right: auto;margin-top: 15vh">
+          <div style="width: 50%; margin-left: auto; margin-right: auto;margin-top: 15vh" v-if="size != 'small'">
             <img src="../assets/bkgd/2.svg"/>
           </div>
 

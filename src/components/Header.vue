@@ -3,7 +3,7 @@
     <div class="site-header">
       <div style="width: 15% !important;display: inline-block;padding-left: 5%">
         <a v-if="this.size !== 'small'" href="/" class="brand" style="color: white">
-          <img style="height: 30px" src="../assets/icons/main_logo.png" alt=""/> Devnet
+          <img style="height: 30px" src="../assets/icons/main_logo.png" alt=""/>
         </a>
       </div>
       <div
@@ -14,10 +14,10 @@
         <p class="highlight" v-else style="display: inline;color: rgb(166 166 166);cursor: pointer" @click="nav('/')">
           Overview
         </p>
-        <p v-if="this.$route.fullPath === '/deepdive' || this.$route.fullPath === '/deepdive/'" class="antihighlight">
+        <p v-if="(this.$route.fullPath === '/deepdive' || this.$route.fullPath === '/deepdive/') && size != 'small'" class="antihighlight">
           Deep Dive
         </p>
-        <p class="highlight" @click="nav('/deepdive')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">
+        <p class="highlight" @click="nav('/deepdive')" v-else-if="size != 'small'" v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">
           Deep Dive
         </p>
         <p v-if="this.$route.fullPath === '/products' || this.$route.fullPath === '/products/'" class="antihighlight">

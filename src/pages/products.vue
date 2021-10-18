@@ -18,13 +18,13 @@
           <br/>
           <br/>
         </h3>
-        <div style="border: 1px solid white;">
+        <div style="border: 1px solid white;" v-if="size != 'small'">
           <img src="../assets/images/exposureportal.png" style="width: 90%"/>
         </div>
 <!--        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; padding-top: 5%">-->
 <!--          <button @click="nav('/connect')" class="arrowbtn">Launch App</button>-->
 <!--        </div>-->
-        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; padding-top: 5vh">
+        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; padding-top: 5vh" v-if="size != 'small'">
           <button class="arrowbtn" style="cursor: not-allowed;">Coming Soon</button>
         </div>
       </div>
@@ -39,7 +39,7 @@
           directly to the primary market to help increase liquidity and lower fees for regular users.
 
         </h3>
-        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; padding-top: 5vh">
+        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; padding-top: 5vh" v-if="size != 'small'">
           <button class="arrowbtn" style="cursor: not-allowed;">Coming Soon</button>
         </div>
 

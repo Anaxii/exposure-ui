@@ -1,7 +1,7 @@
 <template>
   <div class="foot">
-    <div style="width: 55% !important; justify-content: space-between;display: flex;
-  flex-direction: unset; margin-left: auto; margin-right: auto;">
+    <div style="justify-content: space-between;display: flex;
+  flex-direction: unset; margin-left: auto; margin-right: auto;" v-bind:style="{'width': w}">
       <div class="liner">
         <div class="foottext">
           <p>
@@ -10,7 +10,7 @@
           </p>
         </div>
       </div>
-      <div class="liner">
+      <div class="liner" v-if="size != 'small'">
         <p class="headtext">Pages</p>
         <p class="highlight" @click="nav('/')">
           Overview
@@ -40,7 +40,7 @@
           Medium
         </p>
       </div>
-      <div class="liner">
+      <div class="liner" v-if="size != 'small'">
         <p class="headtext">Products</p>
         <p class="highlight" @click="nav('/connect')">
           Exposure Portal
@@ -65,6 +65,7 @@ export default Vue.extend({
   data() {
     return {
       size: 'large',
+      w: '55%'
     }
   },
   model: {},
@@ -79,6 +80,7 @@ export default Vue.extend({
   mounted() {
     if (window.innerWidth < 800) {
       this.size = 'small'
+      this.w = '90%'
     } else if (window.innerWidth < 1500) {
       this.size = 'medium'
     }
