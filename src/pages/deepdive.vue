@@ -149,8 +149,11 @@
             <img src="../assets/images/exposureportal.png" style="width: 90%"/>
           </div>
         </h3>
-        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; margin-top: 2.5vh">
-          <button class="arrowbtn" @click="nav('/connect')">Launch App</button>
+<!--        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; margin-top: 2.5vh">-->
+<!--          <button class="arrowbtn" @click="nav('/connect')">Launch App</button>-->
+<!--        </div>-->
+        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; padding-top: 1vh">
+          <button class="arrowbtn" style="cursor: not-allowed">Coming Soon</button>
         </div>
       </div>
       <div v-bind:style="{'width': minorWidth}"

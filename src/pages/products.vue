@@ -21,10 +21,12 @@
         <div style="border: 1px solid white;">
           <img src="../assets/images/exposureportal.png" style="width: 90%"/>
         </div>
-        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; padding-top: 5%">
-          <button @click="nav('/connect')" class="arrowbtn">Launch App</button>
+<!--        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; padding-top: 5%">-->
+<!--          <button @click="nav('/connect')" class="arrowbtn">Launch App</button>-->
+<!--        </div>-->
+        <div style="width: 25%;margin-left: auto;margin-right: auto;border-radius: 15px; padding-top: 5vh">
+          <button class="arrowbtn" style="cursor: not-allowed;">Coming Soon</button>
         </div>
-
       </div>
 
       <div v-bind:style="{'width': minorWidth}"

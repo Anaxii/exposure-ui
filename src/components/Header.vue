@@ -2,8 +2,8 @@
   <div>
     <div class="site-header">
       <div style="width: 15% !important;display: inline-block;padding-left: 5%">
-        <a v-if="this.size !== 'small'" href="/" class="brand">
-          <img style="height: 30px" src="../assets/icons/main_logo.png" alt=""/>
+        <a v-if="this.size !== 'small'" href="/" class="brand" style="color: white">
+          <img style="height: 30px" src="../assets/icons/main_logo.png" alt=""/> Devnet
         </a>
       </div>
       <div
@@ -78,7 +78,7 @@
           style="width: 15%">
         <div class="wrapper">
           <div class="link_wrapper">
-            <a class="arrowbtn" @click="nav('/connect')">Launch App</a>
+<!--            <a class="arrowbtn" @click="nav('/connect')">Launch App</a>-->
           </div>
         </div>
       </div>
@@ -112,7 +112,7 @@
     <div v-if="this.size !== 'small'" class="announcement">
       <div style="margin-top: auto">
         <p style="font-size: 18px">The Exposure team is competing in the Solana Hackathon!&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a
-            href="https://ignition.devpost.com/" target="_blank">Announcement &#9754;</a></p>
+            href="https://devpost.com/software/exposure-8vn5ct" target="_blank">Announcement &#9754;</a></p>
       </div>
     </div>
   </div>
