@@ -16,7 +16,22 @@
             </div>
           </div>
           <div style="width: 330px; padding-top: 25px">
-            <button class="arrowbtn" style="padding: 0 !important">Confirm</button>
+            <button class="arrowbtn" style="padding: 0 !important" @click="create_shares()">Confirm</button>
+          </div>
+            <div style="width: 330px; padding-top: 25px">
+            <button class="arrowbtn" style="padding: 0 !important" @click="churn()">Churn ETF Weights</button>
+          </div>
+          <div style="width: 330px; padding-top: 25px">
+            <button class="arrowbtn" style="padding: 0 !important" @click="get_etf_weights()">Get ETF Weights</button>
+          </div>
+          <div style="width: 330px; padding-top: 25px">
+            <button class="arrowbtn" style="padding: 0 !important" @click="create_etf()">Create ETF</button>
+          </div>
+          <div style="width: 330px; padding-top: 25px">
+            <button class="arrowbtn" style="padding: 0 !important" @click="add_assets()">Add Assets</button>
+          </div>
+          <div style="width: 330px; padding-top: 25px">
+              <button class="arrowbtn" style="padding: 0 !important" @click="redeem()">Redeem</button>
           </div>
         </div>
       </div>
@@ -33,7 +48,7 @@ import {TokenAmount, lt, lte, isNullOrZero} from '@/utils/safe-math'
 import {formatToMoneyNum, getNumber} from '@/utils'
 import BigNumber from 'bignumber.js'
 import {CreateMultiSIG} from "@/utils/vault";
-
+import {CreateExposureShares, getETFAccount, churnWeight,CreateETF, AddAsset, RedeemExposureShares} from "@/utils/exposure";
 const CollapsePanel = Collapse.Panel
 
 export default Vue.extend({
@@ -86,25 +101,58 @@ export default Vue.extend({
     importIcon,
     TokenAmount,
 
-    async create_vault() {
+    async create_shares() {
       const conn = this.$web3
       const wallet = (this as any).$wallet
-      var addresses: string[] = []
-      //Create Multisig prams
-      addresses = (this.$refs.user_addresses as any).value.toString().split(',')
-      let threshold = (this.$refs.number_votes as any).value
-
-      if (threshold == '' || threshold == undefined) {
-        threshold = addresses.length
-      }
-
-      const msig = await CreateMultiSIG(conn, wallet, addresses, threshold)
-      console.log(msig.toString())
-      localStorage.setItem('vault', msig.multisig_address)
-      localStorage.setItem('token_vault', msig.multisig_vault)
-      this.$refs.vault_address = msig.multisig_address.toString();
-      this.$router.push({path: "/transactions" + "?vault=" + this.$refs.vault_address})
+      let amount = 5000000;
+      let create = await CreateExposureShares(conn, wallet, amount)
     },
+
+    async churn() {
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
+
+      let data = await getETFAccount(conn, wallet);
+      console.log(data)
+      let churn = await churnWeight(conn, wallet)
+      // let tx = await CreateExposureShares(conn, wallet, amount)
+      data = await getETFAccount(conn, wallet);
+      console.log(data)
+    },
+
+    async get_etf_weights() {
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
+
+      let data = await getETFAccount(conn, wallet);
+      for (var i = 0; i < data.weights.length;i++)
+      {
+        console.log(data.weights[i].toString())
+      }
+    },
+
+    async create_etf(){
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
+      
+      let tx_1 = await CreateETF(conn, wallet)
+    },
+
+    async add_assets(){
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
+
+
+      for( var i = 0; i < 5;i++) {
+        let tx = await AddAsset(conn, wallet,i )
+      }
+    },
+    async redeem(){
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
+
+      let tx = await RedeemExposureShares(conn, wallet)
+    }
 
     setCurrBtnType(btnType: any) {
       this.currBtnType = btnType

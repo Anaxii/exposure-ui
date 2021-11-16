@@ -485,8 +485,8 @@ import nacl from 'tweetnacl';
 import { hmacSha256 } from '@/utils/solana'
 import { Numberu64 } from './solana'
 export const endpoints = [
-  { url: 'https://api.mainnet-beta.solana.com/', weight: 90 },
-  { url: 'https://api.mainnet-beta.solana.com/', weight: 10 },
+  { url: 'https://api.devnet.solana.com/', weight: 90 },
+  { url: 'https://api.devnet.solana.com/', weight: 10 },
 ]
 
 export function getRandomEndpoint() {
