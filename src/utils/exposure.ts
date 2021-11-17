@@ -107,7 +107,7 @@ import {
 
     const provider = new anchor.Provider(conn, wallet, anchor.Provider.defaultOptions())
 
-    let token_mints = [TOKEN_A_MINT, TOKEN_B_MINT, TOKEN_C_MINT,TOKEN_D_MINT,TOKEN_E_MINT]
+    let token_mints = [TOKEN_A_MINT, TOKEN_B_MINT, TOKEN_C_MINT,TOKEN_D_MINT,TOKEN_E_MINT, ETF_TOKEN]
 
     let token_client = await getTokenClient(conn, wallet, token_mints[number]);
 
