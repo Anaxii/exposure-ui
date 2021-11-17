@@ -10,7 +10,7 @@
           </div>
           <div style="margin-left: auto;margin-right: auto;width: 330px">
             <div style="margin-left: auto;margin-right: auto">
-              <input type="number"  ref="amount" class="arrowbtn"
+              <input type="number"  ref="amount" class="arrowbtn" v-model="shares"
                      style="text-align: center;font-size: 14px;width: 100%; padding-top: 1.5%; cursor: text; padding-bottom: 1.5%;background: transparent; color: white; border: 3px solid white; border-radius: 15px; outline: none !important"
                      placeholder="# of Shares"/>
             </div>
@@ -70,7 +70,8 @@ export default Vue.extend({
       unstakeModalOpening: false,
       unstaking: false,
       feeMessage: '0.5% fee for deposit within 3 days' as string,
-      inputValue: ''
+      inputValue: '',
+      shares: ''
     }
   },
 
@@ -101,7 +102,20 @@ export default Vue.extend({
     async create_shares() {
       const conn = this.$web3
       const wallet = (this as any).$wallet
-      let create = await CreateExposureShares(conn, wallet, Number(this.$refs.amount.value) * 1e8)
+
+      if(this.shares){
+        if(Number(this.shares) != 0)
+        {
+          let amount = Number(this.shares) * 100000000;
+          console.log(this.shares)
+          let create = await CreateExposureShares(conn, wallet, amount)
+        }
+        else 
+        {
+          //error
+        }
+
+      }
     },
 
     async churn() {

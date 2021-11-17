@@ -1,3 +1,12 @@
 .idea
 .nuxt
 node_modules
+test-ledger/.tmp1F28JD/rocksdb/OPTIONS-000036
+test-ledger/.tmp1F28JD/rocksdb/OPTIONS-000034
+test-ledger/.tmp1F28JD/rocksdb/MANIFEST-000004
+test-ledger/.tmp1F28JD/rocksdb/LOG
+test-ledger/.tmp1F28JD/rocksdb/LOCK
+test-ledger/.tmp1F28JD/rocksdb/IDENTITY
+test-ledger/.tmp1F28JD/rocksdb/CURRENT
+test-ledger/.tmp1F28JD/rocksdb/000003.log
+test-ledger/.tmp1F28JD/genesis.bin
