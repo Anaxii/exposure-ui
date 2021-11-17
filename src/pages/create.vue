@@ -48,7 +48,7 @@ import {TokenAmount, lt, lte, isNullOrZero} from '@/utils/safe-math'
 import {formatToMoneyNum, getNumber} from '@/utils'
 import BigNumber from 'bignumber.js'
 import {CreateMultiSIG} from "@/utils/vault";
-import {CreateExposureShares, getETFAccount, churnWeight,CreateETF, AddAsset, RedeemExposureShares} from "@/utils/exposure";
+import {CreateExposureShares, getWeights, churnWeight,CreateETF, AddAsset, RedeemExposureShares} from "@/utils/exposure";
 const CollapsePanel = Collapse.Panel
 
 export default Vue.extend({
@@ -111,23 +111,17 @@ export default Vue.extend({
     async churn() {
       const conn = this.$web3
       const wallet = (this as any).$wallet
-
-      let data = await getETFAccount(conn, wallet);
-      console.log(data)
       let churn = await churnWeight(conn, wallet)
-      // let tx = await CreateExposureShares(conn, wallet, amount)
-      data = await getETFAccount(conn, wallet);
-      console.log(data)
     },
 
     async get_etf_weights() {
       const conn = this.$web3
       const wallet = (this as any).$wallet
 
-      let data = await getETFAccount(conn, wallet);
-      for (var i = 0; i < data.weights.length;i++)
+      let weights = await getWeights(conn, wallet);
+      for (var i = 0; i < weights.length;i++)
       {
-        console.log(data.weights[i].toString())
+        console.log(weights[i].toString())
       }
     },
 

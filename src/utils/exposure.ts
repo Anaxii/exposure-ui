@@ -160,7 +160,7 @@ import {
       })
   }
 
-  export async function getETFAccount
+  export async function getWeights
   (
     conn: any,
     wallet: any | undefined | null
@@ -172,7 +172,7 @@ import {
     console.log(conn)
     let data = await program.account.exposureEtf.fetch(etf);
 
-    return data;
+    return data.weights;
   }
 
 
