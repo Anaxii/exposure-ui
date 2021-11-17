@@ -74,6 +74,48 @@ import {
       return token_client;
   }
 
+  export async function getPrice(
+    conn: any,
+    wallet: any,
+    number: any,
+  )
+  {
+    if (!conn || !wallet) throw new Error('Missing connection')
+
+    const provider = new anchor.Provider(conn, wallet, anchor.Provider.defaultOptions())
+
+    const program = new anchor.Program(idl, programId, provider);
+
+    let token_market = [TOKEN_A_MARKET, TOKEN_B_MARKET, TOKEN_C_MARKET,TOKEN_D_MARKET,TOKEN_E_MARKET]
+
+
+    let market = await Market.load(conn, token_market[number], {},new anchor.web3.PublicKey("DESVgJVGajEgKGXhb6XmqDHGz3VjdgP7rEVESBgxmroY"));
+
+    // Fetching orderbooks
+    let bids = await market.loadBids(conn);
+
+    return bids[0][0];
+  }
+
+  export async function getSupply(
+    conn: any,
+    wallet: any,
+    number: any,
+  )
+  {
+    if (!conn || !wallet) throw new Error('Missing connection')
+
+    const provider = new anchor.Provider(conn, wallet, anchor.Provider.defaultOptions())
+
+    let token_mints = [TOKEN_A_MINT, TOKEN_B_MINT, TOKEN_C_MINT,TOKEN_D_MINT,TOKEN_E_MINT]
+
+    let token_client = await getTokenClient(conn, wallet, token_mints[number]);
+
+    let mint_data = await token_client.getMintInfo();
+
+    return mint_data.supply;
+  }
+
   export async function churnWeight
   (conn: any,
    wallet: any | undefined | null)
