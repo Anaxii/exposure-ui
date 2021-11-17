@@ -8,7 +8,7 @@
       </div>
       <div
           v-if="this.$route.fullPath === '/' || this.$route.fullPath === '/deepdive' || this.$route.fullPath === '/community' || this.$route.fullPath === '/products' ||
-        this.$route.fullPath === '/' || this.$route.fullPath === '/deepdive/' || this.$route.fullPath === '/community/' || this.$route.fullPath === '/products/'"
+        this.$route.fullPath === '/' || this.$route.fullPath === '/deepdive/' || this.$route.fullPath === '/community/' || this.$route.fullPath === '/products/' || this.$route.fullPath === '/connect/'  || this.$route.fullPath == '/connect'"
           style="width: 350px !important; justify-content: space-between;display: flex;align-items: center;flex-direction: unset;">
         <p v-if="this.$route.fullPath === '/'" class="antihighlight">Overview</p>
         <p class="highlight" v-else style="display: inline;color: rgb(166 166 166);cursor: pointer" @click="nav('/')">
@@ -35,7 +35,7 @@
         </p>
 
       </div>
-      <div v-else style="width: 425px !important; justify-content: space-between;display: flex;align-items: center;flex-direction: unset;">
+      <div v-else style="width: 275px !important; justify-content: space-between;display: flex;align-items: center;flex-direction: unset;">
         <p v-if="this.$route.fullPath === '/portfolio' || this.$route.fullPath === '/portfolio/'" class="antihighlight">
           Portfolio
         </p>
@@ -63,12 +63,12 @@
         <p class="highlight" @click="nav('/redeem')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">
           Redeem
         </p>
-        <p v-if="this.$route.fullPath === '/faucet' || this.$route.fullPath === '/faucet/'" class="antihighlight">
-          Faucet
-        </p>
-        <p class="highlight" @click="nav('/faucet')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">
-          Faucet
-        </p>
+<!--        <p v-if="this.$route.fullPath === '/faucet' || this.$route.fullPath === '/faucet/'" class="antihighlight">-->
+<!--          Faucet-->
+<!--        </p>-->
+<!--        <p class="highlight" @click="nav('/faucet')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">-->
+<!--          Faucet-->
+<!--        </p>-->
 
       </div>
 
