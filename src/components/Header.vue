@@ -45,12 +45,12 @@
         <!--        <p v-if="this.$route.fullPath == '/stats' || this.$route.fullPath == '/stats/'" class="antihighlight">ETF Stats</p>-->
         <!--        <p class="highlight" v-else style="display: inline;color: rgb(166 166 166);cursor: pointer" @click="nav('/stats')">-->
         <!--          ETF Stats</p>-->
-        <p v-if="this.$route.fullPath === '/purchase' || this.$route.fullPath === '/purchase/'" class="antihighlight">
-          Purchase
-        </p>
-        <p class="highlight" @click="nav('/purchase')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">
-          Purchase
-        </p>
+<!--        <p v-if="this.$route.fullPath === '/purchase' || this.$route.fullPath === '/purchase/'" class="antihighlight">-->
+<!--          Purchase-->
+<!--        </p>-->
+<!--        <p class="highlight" @click="nav('/purchase')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">-->
+<!--          Purchase-->
+<!--        </p>-->
         <p v-if="this.$route.fullPath === '/create' || this.$route.fullPath === '/create/'" class="antihighlight">
           Create
         </p>

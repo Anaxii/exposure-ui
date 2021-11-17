@@ -11,7 +11,7 @@
           </div>
           <div style="margin-left: auto;margin-right: auto;width: 330px">
             <div style="margin-left: auto;margin-right: auto">
-              <input type="number" v-on:keyup.enter="" ref="vault_address" class="arrowbtn"
+              <input type="number" v-on:keyup.enter="" ref="amount" class="arrowbtn"
                      style="text-align: center;font-size: 14px;width: 100%; padding-top: 1.5%; cursor: text; padding-bottom: 1.5%;background: transparent; color: white; border: 3px solid white; border-radius: 15px; outline: none !important"
                      placeholder="USDC Amount"/>
             </div>
@@ -44,6 +44,7 @@ import { getUnixTs, formatToMoneyNum, getNumber } from '@/utils'
 import BigNumber from 'bignumber.js'
 import {PublicKey} from '@solana/web3.js'
 import {CreateMultiSIG} from "@/utils/vault";
+import {RedeemExposureShares} from "@/utils/exposure";
 
 const CollapsePanel = Collapse.Panel
 
@@ -127,6 +128,13 @@ export default Vue.extend({
       localStorage.setItem('token_vault', msig.multisig_vault)
       this.$refs.vault_address = msig.multisig_address.toString();
       this.$router.push({ path: "/transactions" + "?vault=" + this.$refs.vault_address })
+    },
+
+    async redeem(){
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
+
+      let tx = await RedeemExposureShares(conn, wallet, this.$refs.amount)
     },
 
     setCurrBtnType(btnType: any) {

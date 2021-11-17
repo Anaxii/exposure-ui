@@ -10,7 +10,7 @@
           </div>
           <div style="margin-left: auto;margin-right: auto;width: 330px">
             <div style="margin-left: auto;margin-right: auto">
-              <input type="number"  ref="vault_address" class="arrowbtn"
+              <input type="number"  ref="amount" class="arrowbtn"
                      style="text-align: center;font-size: 14px;width: 100%; padding-top: 1.5%; cursor: text; padding-bottom: 1.5%;background: transparent; color: white; border: 3px solid white; border-radius: 15px; outline: none !important"
                      placeholder="# of Shares"/>
             </div>
@@ -18,21 +18,18 @@
           <div style="width: 330px; padding-top: 25px">
             <button class="arrowbtn" style="padding: 0 !important" @click="create_shares()">Confirm</button>
           </div>
-            <div style="width: 330px; padding-top: 25px">
-            <button class="arrowbtn" style="padding: 0 !important" @click="churn()">Churn ETF Weights</button>
-          </div>
-          <div style="width: 330px; padding-top: 25px">
-            <button class="arrowbtn" style="padding: 0 !important" @click="get_etf_weights()">Get ETF Weights</button>
-          </div>
-          <div style="width: 330px; padding-top: 25px">
-            <button class="arrowbtn" style="padding: 0 !important" @click="create_etf()">Create ETF</button>
-          </div>
-          <div style="width: 330px; padding-top: 25px">
-            <button class="arrowbtn" style="padding: 0 !important" @click="add_assets()">Add Assets</button>
-          </div>
-          <div style="width: 330px; padding-top: 25px">
-              <button class="arrowbtn" style="padding: 0 !important" @click="redeem()">Redeem</button>
-          </div>
+<!--            <div style="width: 330px; padding-top: 25px">-->
+<!--            <button class="arrowbtn" style="padding: 0 !important" @click="churn()">Churn ETF Weights</button>-->
+<!--          </div>-->
+<!--          <div style="width: 330px; padding-top: 25px">-->
+<!--            <button class="arrowbtn" style="padding: 0 !important" @click="get_etf_weights()">Get ETF Weights</button>-->
+<!--          </div>-->
+<!--          <div style="width: 330px; padding-top: 25px">-->
+<!--            <button class="arrowbtn" style="padding: 0 !important" @click="create_etf()">Create ETF</button>-->
+<!--          </div>-->
+<!--          <div style="width: 330px; padding-top: 25px">-->
+<!--            <button class="arrowbtn" style="padding: 0 !important" @click="add_assets()">Add Assets</button>-->
+<!--          </div>-->
         </div>
       </div>
     </div>
@@ -104,8 +101,7 @@ export default Vue.extend({
     async create_shares() {
       const conn = this.$web3
       const wallet = (this as any).$wallet
-      let amount = 5000000;
-      let create = await CreateExposureShares(conn, wallet, amount)
+      let create = await CreateExposureShares(conn, wallet, Number(this.$refs.amount.value) * 1e8)
     },
 
     async churn() {
@@ -141,12 +137,6 @@ export default Vue.extend({
         let tx = await AddAsset(conn, wallet,i )
       }
     },
-    async redeem(){
-      const conn = this.$web3
-      const wallet = (this as any).$wallet
-
-      let tx = await RedeemExposureShares(conn, wallet)
-    }
 
     setCurrBtnType(btnType: any) {
       this.currBtnType = btnType

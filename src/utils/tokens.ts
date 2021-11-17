@@ -90,6 +90,46 @@ export const NATIVE_SOL: TokenInfo = {
 }
 
 export const TOKENS: Tokens = {
+  A: {
+    symbol: 'A',
+    name: 'A',
+    mintAddress: 'HipXwn3m4XRaEVP4ak82rGD1AR8wHQBGNkcAsjXizXqJ',
+    decimals: 9,
+    referrer: 'HTcarLHe7WRxBQCWvhVB8AP56pnEtJUV2jDGvcpY3xo5',
+    tags: ['raydium']
+  },
+  B: {
+    symbol: 'B',
+    name: 'B',
+    mintAddress: '4yjrobNPWfwK9PkPQQ3HsiNhjKRAEi2gBxMtth7UTa3t',
+    decimals: 9,
+    referrer: 'HTcarLHe7WRxBQCWvhVB8AP56pnEtJUV2jDGvcpY3xo5',
+    tags: ['raydium']
+  },
+  C: {
+    symbol: 'C',
+    name: 'C',
+    mintAddress: '3a3fDgsnhydFTksXoAjHWec4iDR7ZNApAppkCG4gbJ4n',
+    decimals: 9,
+    referrer: 'HTcarLHe7WRxBQCWvhVB8AP56pnEtJUV2jDGvcpY3xo5',
+    tags: ['raydium']
+  },
+  D: {
+    symbol: 'D',
+    name: 'D',
+    mintAddress: 'DvxzkaiZdnzMYC9aLpNYueVuWHydfW8BcfiAt8hMFVUu',
+    decimals: 9,
+    referrer: 'HTcarLHe7WRxBQCWvhVB8AP56pnEtJUV2jDGvcpY3xo5',
+    tags: ['raydium']
+  },
+  E: {
+    symbol: 'E',
+    name: 'E',
+    mintAddress: '8ZS9wiKSx1eVpgB67fzFqSTyNTbHKyLmeK7A6nQWf1am',
+    decimals: 9,
+    referrer: 'HTcarLHe7WRxBQCWvhVB8AP56pnEtJUV2jDGvcpY3xo5',
+    tags: ['raydium']
+  },
   SBR: {
     symbol: 'SBR',
     name: 'Saber',

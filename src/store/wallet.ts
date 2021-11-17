@@ -168,6 +168,7 @@ export const actions = actionTree(
             }
 
 
+
             localStorage.setItem('tokenBalances', JSON.stringify(tokenAccounts))
             commit('setBalances', tokenAccounts)
 

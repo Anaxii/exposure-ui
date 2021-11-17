@@ -22,8 +22,8 @@
             <div style="width: 70%; margin: 0 10%; padding: 10% 0;">
               <p style="font-size: 14px; color: #959595; line-height: 0.1">USDC Balance</p>
               <p style="font-size: 24px">{{ this.SOL5Balances.USDC.toLocaleString() }}</p>
-              <p style="font-size: 14px; color: #959595; line-height: 0.1">Wallet Value</p>
-              <p style="font-size: 24px">${{ (this.ETFValue + this.SOL5Balances.USDC).toLocaleString() }}</p>
+<!--              <p style="font-size: 14px; color: #959595; line-height: 0.1">Wallet Value</p>-->
+<!--              <p style="font-size: 24px">${{ (this.ETFValue + this.SOL5Balances.USDC).toLocaleString() }}</p>-->
               <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Shares</p>
               <p style="font-size: 24px">1,000</p>
               <p style="font-size: 14px; color: #959595; line-height: 0.1">ETF Shares Value</p>
@@ -89,6 +89,7 @@ import {mapState} from 'vuex'
 import {Alert} from 'ant-design-vue'
 import {getTokenByMintAddress} from "@/utils/tokens";
 import PieChart from "@/chart/PieChart";
+import {getWeights} from "@/utils/exposure";
 
 export default Vue.extend({
   components: {
@@ -105,34 +106,34 @@ export default Vue.extend({
       ETFValue: 0,
       SOL5Balances: {
         USDC: 0,
-        SOL: 0,
-        SRM: 0,
-        RAY: 0,
-        MNGO: 0,
-        SBR: 0
+        A: 0,
+        B: 0,
+        C: 0,
+        D: 0,
+        E: 0
       },
       SOL5Allocation: {
         USDC: 0,
-        SOL: 0,
-        SRM: 0,
-        RAY: 0,
-        MNGO: 0,
-        SBR: 0
+        A: 0,
+        B: 0,
+        C: 0,
+        D: 0,
+        E: 0
       },
       SOL5Value: {
         USDC: 0,
-        SOL: 0,
-        SRM: 0,
-        RAY: 0,
-        MNGO: 0,
-        SBR: 0
+        A: 0,
+        B: 0,
+        C: 0,
+        D: 0,
+        E: 0
       },
       tokenList: [
-          'SOL',
-          'SRM',
-          'RAY',
-          'MNGO',
-          'SBR'
+          'A',
+          'B',
+          'C',
+          'D',
+          'E'
       ],
       tokenPrices: {} as any,
       ready: false,
@@ -147,7 +148,7 @@ export default Vue.extend({
       chartData: {
         hoverBackgroundColor: "red",
         hoverBorderWidth: 10,
-        labels: ["SOL", "RAY", "MANGO", "SABER", "SRM"],
+        labels: ["A", "B", "C", "D", "E"],
         datasets: [
           {
             label: "Data One",
@@ -174,6 +175,7 @@ export default Vue.extend({
     this.$accessor.wallet.getTokenAccounts()
     this.updateBalances()
     this.ready = true
+    this.get_etf_weights()
     setInterval(this.getBalances, 10000)
   },
 
@@ -185,20 +187,20 @@ export default Vue.extend({
     updateBalances() {
       const SOL5 = [
         'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-        'So11111111111111111111111111111111111111112',
-        'SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt',
-        '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R',
-        '2prC8tcVsXwVJAinhxd2zeMeWMWaVyzPoQeLKyDZRFKd',
-        'GyktbGXbH9kvxP8RGfWsnFtuRgC7QCQo2WBqpo3ryk7L'
+        'HipXwn3m4XRaEVP4ak82rGD1AR8wHQBGNkcAsjXizXqJ',
+        '4yjrobNPWfwK9PkPQQ3HsiNhjKRAEi2gBxMtth7UTa3t',
+        '3a3fDgsnhydFTksXoAjHWec4iDR7ZNApAppkCG4gbJ4n',
+        'DvxzkaiZdnzMYC9aLpNYueVuWHydfW8BcfiAt8hMFVUu',
+        '8ZS9wiKSx1eVpgB67fzFqSTyNTbHKyLmeK7A6nQWf1am'
       ]
       let prices = this.$accessor.price.prices
       if (prices['SOL'] == undefined) {
         prices = {
-          SOL: 0,
-          MNGO: 0,
-          SBR: 0,
-          RAY: 0,
-          SRM: 0
+          A: 0,
+          B: 0,
+          C: 0,
+          D: 0,
+          E: 0
         }
       }
 
@@ -239,6 +241,20 @@ export default Vue.extend({
         this.SOL5Allocation[tokens[i]] = ((this.SOL5Balances[tokens[i]] * prices[tokens[i]]) / totalValue) * 100
       }
 
+    },
+
+    async get_etf_weights() {
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
+
+      let weights = await getWeights(conn, wallet);
+      let total = 0
+      for (let i = 0; i < weights.length; i++)
+      {
+        total += Number(weights[i])
+        console.log(weights[i].toString())
+      }
+      console.log('tot', total)
     },
 
     getBalances() {
