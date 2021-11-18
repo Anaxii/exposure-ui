@@ -6,7 +6,7 @@
           <span class="name">Create SOL5 Shares</span>
           <div class="item">
             <p>Balances: Solana: 0 | Raydium: 0 | Serum: 0 | Saber: 0 | Mango: 0</p>
-            <p>Ratios: Solana: 40% | Raydium: 20% | Serum: 10% | Saber: 10% | Mango: 10%</p>
+            <p>Token A: 40% | Token B: 20% | Token C: 10% | Token D: 10% | Token E: 10%</p>
           </div>
           <div style="margin-left: auto;margin-right: auto;width: 330px">
             <div style="margin-left: auto;margin-right: auto">
