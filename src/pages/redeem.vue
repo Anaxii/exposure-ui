@@ -11,14 +11,14 @@
           </div>
           <div style="margin-left: auto;margin-right: auto;width: 330px">
             <div style="margin-left: auto;margin-right: auto">
-              <input type="number" v-on:keyup.enter="" ref="amount" class="arrowbtn"
+              <input type="number" v-on:keyup.enter="" ref="amount" class="arrowbtn" v-model="shares"
                      style="text-align: center;font-size: 14px;width: 100%; padding-top: 1.5%; cursor: text; padding-bottom: 1.5%;background: transparent; color: white; border: 3px solid white; border-radius: 15px; outline: none !important"
-                     placeholder="USDC Amount"/>
+                     placeholder="Amount of Shares"/>
             </div>
           </div>
           <div style="width: 330px; padding-top: 25px">
 
-            <button  class="arrowbtn" style="padding: 0 !important">Confirm</button>
+            <button  class="arrowbtn" style="padding: 0 !important" @click="redeem()">Redeem</button>
           </div>
 
         </div>
@@ -80,7 +80,8 @@ export default Vue.extend({
       unstakeModalOpening: false,
       unstaking: false,
       feeMessage: '0.5% fee for deposit within 3 days' as string,
-      inputValue: ''
+      inputValue: '',
+      shares: ''
     }
   },
 
@@ -110,31 +111,23 @@ export default Vue.extend({
     importIcon,
     TokenAmount,
 
-    async create_vault() {
-      const conn = this.$web3
-      const wallet = (this as any).$wallet
-      var addresses:string[] = []
-      //Create Multisig prams
-      addresses = (this.$refs.user_addresses as any).value.toString().split(',')
-      let threshold = (this.$refs.number_votes as any).value
-
-      if (threshold == '' || threshold == undefined) {
-        threshold = addresses.length
-      }
-
-      const msig = await CreateMultiSIG(conn, wallet, addresses, threshold)
-      console.log(msig.toString())
-      localStorage.setItem('vault', msig.multisig_address)
-      localStorage.setItem('token_vault', msig.multisig_vault)
-      this.$refs.vault_address = msig.multisig_address.toString();
-      this.$router.push({ path: "/transactions" + "?vault=" + this.$refs.vault_address })
-    },
-
     async redeem(){
       const conn = this.$web3
       const wallet = (this as any).$wallet
 
-      let tx = await RedeemExposureShares(conn, wallet, this.$refs.amount)
+      if(this.shares){
+        if(Number(this.shares) != 0)
+        {
+          let amount = Number(this.shares) * 100000000;
+          console.log(this.shares)
+          let create = await RedeemExposureShares(conn, wallet, amount)
+        }
+        else 
+        {
+          //error
+        }
+
+      }
     },
 
     setCurrBtnType(btnType: any) {
