@@ -74,6 +74,34 @@ import {
       return token_client;
   }
 
+  export async function getUnderlyingAssetsInVault(
+    conn: any,
+    wallet: any,
+    number: any,
+  )
+  {
+    const provider = new anchor.Provider(conn, wallet, anchor.Provider.defaultOptions())
+
+    const program = new anchor.Program(idl, programId, provider);
+
+    let token_vaults = [TOKEN_A_VAULT, TOKEN_B_VAULT, TOKEN_C_VAULT, TOKEN_D_VAULT,TOKEN_E_VAULT]
+    let token_mints = [TOKEN_A_MINT, TOKEN_B_MINT, TOKEN_C_MINT,TOKEN_D_MINT,TOKEN_E_MINT, ETF_TOKEN]
+
+
+    let token_client = await getTokenClient(conn,wallet, token_mints[number]);
+
+    let info = await token_client.getAccountInfo(token_vaults[number]);
+
+    //handle error if account info is not there
+    if(info)
+    {
+      return info.amount;
+    } 
+
+
+    return "error: No Account Info";
+  }
+
   export async function getPrice(
     conn: any,
     wallet: any,
