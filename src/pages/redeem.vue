@@ -11,14 +11,14 @@
           </div>
           <div style="margin-left: auto;margin-right: auto;width: 330px">
             <div style="margin-left: auto;margin-right: auto">
-              <input type="number"  ref="amount" class="arrowbtn" v-model="shares"
+              <input type="number" v-on:keyup.enter="" ref="amount" class="arrowbtn" v-model="shares"
                      style="text-align: center;font-size: 14px;width: 100%; padding-top: 1.5%; cursor: text; padding-bottom: 1.5%;background: transparent; color: white; border: 3px solid white; border-radius: 15px; outline: none !important"
-                     placeholder="# of Shares"/>
+                     placeholder="Amount of Shares"/>
             </div>
           </div>
           <div style="width: 330px; padding-top: 25px">
 
-            <button  class="arrowbtn" style="padding: 0 !important">Confirm</button>
+            <button  class="arrowbtn" style="padding: 0 !important" @click="redeem()">Redeem</button>
           </div>
 
         </div>
