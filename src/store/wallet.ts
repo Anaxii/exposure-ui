@@ -166,9 +166,6 @@ export const actions = actionTree(
               tokenAccountAddress: wallet.publicKey.toBase58(),
               balance: new TokenAmount(solBalance, NATIVE_SOL.decimals)
             }
-
-            console.log((tokenAccounts[new anchor.web3.PublicKey("8f2YCqTRCwqMmmifmeB5qDkaduZfPQmfDWZZU5bqf1En")].balance.wei / 1e8).toString())
-
             localStorage.setItem('tokenBalances', JSON.stringify(tokenAccounts))
             commit('setBalances', tokenAccounts)
 
