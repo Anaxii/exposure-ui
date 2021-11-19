@@ -122,7 +122,7 @@ import {
     // Fetching orderbooks
     let bids = await market.loadBids(conn);
 
-    return bids[0][0];
+    return bids.getL2(1)[0][0];
   }
 
   export async function getSupply(
@@ -197,7 +197,6 @@ import {
     const provider = new anchor.Provider(conn, wallet, anchor.Provider.defaultOptions())
 
     const program = new anchor.Program(idl, programId, provider);
-    console.log(conn)
     let data = await program.account.exposureEtf.fetch(etf);
 
     return data.weights;
@@ -383,7 +382,6 @@ import {
         let tca = await getTokenClient(conn, wallet,token_mints[i])
         let account = await tca.getOrCreateAssociatedAccountInfo(wallet.publicKey)
         token_accounts.push(account)
-        console.log(account)
     }
 
     let creationAccounts = [
