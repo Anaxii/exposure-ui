@@ -5,7 +5,8 @@
         <p class="title">Exposure Portfolio</p>
       </div>
       <div class="total">
-        <div style=" background-color: #070707;display: grid; grid-template-columns:  45fr 55fr; margin-top: 5vh; border-radius: 5px">
+        <div
+            style=" background-color: #070707;display: grid; grid-template-columns:  45fr 55fr; margin-top: 5vh; border-radius: 5px">
           <div style="border-right: 1px solid white;">
             <div style="margin: 5%; padding: 5% 0">
               <div class="implode"
@@ -18,7 +19,7 @@
               </div>
             </div>
           </div>
-          <div >
+          <div>
             <div style="width: 70%; margin: 0 10%; padding: 10% 0;">
               <p style="font-size: 14px; color: #959595; line-height: 0.1">USDC Balance</p>
               <p style="font-size: 24px">{{ this.SOL5Balances.USDC.toLocaleString() }}</p>
@@ -27,7 +28,9 @@
               <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Shares</p>
               <p style="font-size: 24px">{{ (this.SOL5Balances.SOL5 / 100).toLocaleString() }}</p>
               <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Equity</p>
-              <p style="font-size: 24px">{{ (((this.SOL5Balances.SOL5/100)/this.etfSupply)*100).toLocaleString() }}%</p>
+              <p style="font-size: 24px">{{
+                  (((this.SOL5Balances.SOL5 / 100) / this.etfSupply) * 100).toLocaleString()
+                }}%</p>
               <p style="font-size: 14px; color: #959595; line-height: 0.1">ETF Shares Value</p>
               <p style="font-size: 24px">${{ this.ETFValue.toLocaleString() }}</p>
             </div>
@@ -60,12 +63,13 @@
             </div>
           </div>
           <div style="width: 90%; margin: 0 5%; padding-top: 2.5%; padding-bottom: 2.55%">
-            <div v-for="(item, index) in tokenList" :key="item.id" style="display: grid;  grid-template-columns: 1fr 1fr 1fr 1fr 1fr">
+            <div v-for="(item, index) in tokenList" :key="item.id"
+                 style="display: grid;  grid-template-columns: 1fr 1fr 1fr 1fr 1fr">
               <p>
                 {{ item }}
               </p>
               <p>
-                {{ SOL5Balances[item] * (((SOL5Balances.SOL5/100)/etfSupply)) }}
+                {{ SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) }}
               </p>
               <p>
                 ${{ tokenPrices[item] }}
@@ -74,7 +78,7 @@
                 ${{ SOL5Value[item].toLocaleString() }}
               </p>
               <p>
-                {{ weights[item].toFixed(2) }}%
+                {{ (weights[item]/1e6).toFixed(4)}}%
               </p>
             </div>
           </div>
@@ -91,7 +95,7 @@ import {mapState} from 'vuex'
 import {Alert} from 'ant-design-vue'
 import {getTokenByMintAddress} from "@/utils/tokens";
 import PieChart from "@/chart/PieChart";
-import {getSupply, getWeights, getUnderlyingAssetsInVault} from "@/utils/exposure";
+import {getSupply, getWeights, getUnderlyingAssetsInVault, WEIGHTS} from "@/utils/exposure";
 
 export default Vue.extend({
   components: {
@@ -135,11 +139,11 @@ export default Vue.extend({
         E: 0
       },
       tokenList: [
-          'A',
-          'B',
-          'C',
-          'D',
-          'E'
+        'A',
+        'B',
+        'C',
+        'D',
+        'E'
       ],
       assets: {},
       tokenPrices: {} as any,
@@ -168,7 +172,7 @@ export default Vue.extend({
           {
             label: "Data One",
             backgroundColor: ["#a37bff", "#b400ff", "#7c1fff", "#DC1FFF", "#c67bff"],
-            data: [50, 25, 2.5, 15, 7.5]
+            data: [(Number(WEIGHTS[0])/1e6).toFixed(4), (Number(WEIGHTS[1])/1e6).toFixed(4), (Number(WEIGHTS[2])/1e6).toFixed(4), (Number(WEIGHTS[3])/1e6).toFixed(4), (Number(WEIGHTS[4])/1e6).toFixed(4)]
           }
         ]
       }
@@ -186,23 +190,31 @@ export default Vue.extend({
   watch: {},
 
   mounted() {
+    let total = 0
+    let _weight = {}
+    for (let i = 0; i < WEIGHTS.length; i++) {
+      _weight[this.tokenList[i]] = Number(WEIGHTS[i])
+    }
+    this.totalWeight = total
+    this.weights = _weight
+
     this.$accessor.price.requestPrices()
     this.$accessor.wallet.getTokenAccounts()
     this.updateBalances()
     const conn = this.$web3
     const wallet = (this as any).$wallet
-    let supply = getSupply(conn, wallet, 5).then((result) => {
+
+    getSupply(conn, wallet, 5).then((result) => {
       let r = (Number(result) / 1e8).toString()
       this.etfSupply = Number(r)
     })
+
     for (let i = 0; i < this.tokenList.length; i++) {
-      let assets = getUnderlyingAssetsInVault(conn, wallet, i).then((result) => {
-        console.log(this.tokenList[i], (Number(result)/1e8).toString())
+      getUnderlyingAssetsInVault(conn, wallet, i).then((result) => {
         //@ts-ignore
-        this.SOL5Balances[this.tokenList[i]] = Number((Number(result)/1e8).toString())
+        this.SOL5Balances[this.tokenList[i]] = Number((Number(result) / 1e8).toString())
       })
     }
-    console.log(this.SOL5Balances)
     this.ready = true
     setInterval(this.getBalances, 10000)
   },
@@ -222,7 +234,7 @@ export default Vue.extend({
     updateBalances() {
       const SOL5 = [
         'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-          '8f2YCqTRCwqMmmifmeB5qDkaduZfPQmfDWZZU5bqf1En',
+        '8f2YCqTRCwqMmmifmeB5qDkaduZfPQmfDWZZU5bqf1En',
         'HipXwn3m4XRaEVP4ak82rGD1AR8wHQBGNkcAsjXizXqJ',
         '4yjrobNPWfwK9PkPQQ3HsiNhjKRAEi2gBxMtth7UTa3t',
         '3a3fDgsnhydFTksXoAjHWec4iDR7ZNApAppkCG4gbJ4n',
@@ -254,15 +266,15 @@ export default Vue.extend({
           if (tokenInfo != null) {
             //@ts-ignore
             if (tokenInfo.symbol == 'SOL5' || tokenInfo.symbol == 'USDC')
-              //@ts-ignore
+                //@ts-ignore
               this.SOL5Balances[tokenInfo.symbol] = this.tokenBalances[this.tokenAccounts[i]].balance.wei / 10 ** 6
-            }
           }
         }
+      }
 
 
       this.ETFValue = totalValue
-      },
+    },
 
     get_etf_weights() {
       const conn = this.$web3
@@ -270,8 +282,7 @@ export default Vue.extend({
 
       let weights = getWeights(conn, wallet).then((weights) => {
         let total = 0
-        for (let i = 0; i < weights.length; i++)
-        {
+        for (let i = 0; i < weights.length; i++) {
           total += Number(weights[i])
           this.weights[Object.keys(this.tokenList)[i]] = weights[i]
           console.log(this.weights)
@@ -296,6 +307,7 @@ export default Vue.extend({
 p {
   font-size: 14px
 }
+
 .title {
   font-size: 40px;
   color: #fff;
