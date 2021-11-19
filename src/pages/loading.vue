@@ -67,6 +67,7 @@ export default Vue.extend({
   mounted() {
     // @ts-ignore
     this.$accessor.wallet.getTokenAccounts()
+    this.getWeights()
     this.changePageInterval = window.setInterval(() => {
       this.checkBalance()
     }, 1000)

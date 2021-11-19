@@ -22,10 +22,12 @@
             <div style="width: 70%; margin: 0 10%; padding: 10% 0;">
               <p style="font-size: 14px; color: #959595; line-height: 0.1">USDC Balance</p>
               <p style="font-size: 24px">{{ this.SOL5Balances.USDC.toLocaleString() }}</p>
-<!--              <p style="font-size: 14px; color: #959595; line-height: 0.1">Wallet Value</p>-->
-<!--              <p style="font-size: 24px">${{ (this.ETFValue + this.SOL5Balances.USDC).toLocaleString() }}</p>-->
+              <p style="font-size: 14px; color: #959595; line-height: 0.1">Wallet Value</p>
+              <p style="font-size: 24px">${{ (this.ETFValue + this.SOL5Balances.USDC).toLocaleString() }}</p>
               <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Shares</p>
-              <p style="font-size: 24px">1,000</p>
+              <p style="font-size: 24px">{{ (this.SOL5Balances.SOL5 / 100).toLocaleString() }}</p>
+              <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Equity</p>
+              <p style="font-size: 24px">{{ (((this.SOL5Balances.SOL5/100)/this.etfSupply)*100).toLocaleString() }}%</p>
               <p style="font-size: 14px; color: #959595; line-height: 0.1">ETF Shares Value</p>
               <p style="font-size: 24px">${{ this.ETFValue.toLocaleString() }}</p>
             </div>
@@ -58,12 +60,12 @@
             </div>
           </div>
           <div style="width: 90%; margin: 0 5%; padding-top: 2.5%; padding-bottom: 2.55%">
-            <div v-for="item in tokenList" :key="item.id" style="display: grid;  grid-template-columns: 1fr 1fr 1fr 1fr 1fr">
+            <div v-for="(item, index) in tokenList" :key="item.id" style="display: grid;  grid-template-columns: 1fr 1fr 1fr 1fr 1fr">
               <p>
                 {{ item }}
               </p>
               <p>
-                {{ SOL5Balances[item].toFixed(6) }}
+                {{ SOL5Balances[item] * (((SOL5Balances.SOL5/100)/etfSupply)) }}
               </p>
               <p>
                 ${{ tokenPrices[item] }}
@@ -72,7 +74,7 @@
                 ${{ SOL5Value[item].toLocaleString() }}
               </p>
               <p>
-                {{ SOL5Allocation[item].toFixed(2) }}%
+                {{ weights[item].toFixed(2) }}%
               </p>
             </div>
           </div>
@@ -89,7 +91,7 @@ import {mapState} from 'vuex'
 import {Alert} from 'ant-design-vue'
 import {getTokenByMintAddress} from "@/utils/tokens";
 import PieChart from "@/chart/PieChart";
-import {getWeights} from "@/utils/exposure";
+import {getSupply, getWeights, getUnderlyingAssetsInVault} from "@/utils/exposure";
 
 export default Vue.extend({
   components: {
@@ -104,8 +106,10 @@ export default Vue.extend({
       tokenBalances: {} as any,
       USDValue: 0,
       ETFValue: 0,
+      etfSupply: 0,
       SOL5Balances: {
         USDC: 0,
+        SOL5: 0,
         A: 0,
         B: 0,
         C: 0,
@@ -114,6 +118,7 @@ export default Vue.extend({
       },
       SOL5Allocation: {
         USDC: 0,
+        SOL5: 0,
         A: 0,
         B: 0,
         C: 0,
@@ -122,6 +127,7 @@ export default Vue.extend({
       },
       SOL5Value: {
         USDC: 0,
+        SOL5: 0,
         A: 0,
         B: 0,
         C: 0,
@@ -135,8 +141,17 @@ export default Vue.extend({
           'D',
           'E'
       ],
+      assets: {},
       tokenPrices: {} as any,
       ready: false,
+      weights: {
+        A: 0,
+        B: 0,
+        C: 0,
+        D: 0,
+        E: 0
+      },
+      totalWeight: 0,
       chartOptions: {
         hoverBorderWidth: 20,
         defaultFontColor: "#fff",
@@ -174,12 +189,32 @@ export default Vue.extend({
     this.$accessor.price.requestPrices()
     this.$accessor.wallet.getTokenAccounts()
     this.updateBalances()
+    const conn = this.$web3
+    const wallet = (this as any).$wallet
+    let supply = getSupply(conn, wallet, 5).then((result) => {
+      let r = (Number(result) / 1e8).toString()
+      this.etfSupply = Number(r)
+    })
+    for (let i = 0; i < this.tokenList.length; i++) {
+      let assets = getUnderlyingAssetsInVault(conn, wallet, i).then((result) => {
+        console.log(this.tokenList[i], (Number(result)/1e8).toString())
+        //@ts-ignore
+        this.SOL5Balances[this.tokenList[i]] = Number((Number(result)/1e8).toString())
+      })
+    }
+    console.log(this.SOL5Balances)
     this.ready = true
-    this.get_etf_weights()
     setInterval(this.getBalances, 10000)
   },
 
   updated() {
+    const conn = this.$web3
+    const wallet = (this as any).$wallet
+    let supply = getSupply(conn, wallet, 5).then((result) => {
+      let r = (Number(result) / 1e8)
+      this.etfSupply = Number(r)
+    })
+    console.log(this.SOL5Balances)
     this.getBalances()
   },
 
@@ -187,6 +222,7 @@ export default Vue.extend({
     updateBalances() {
       const SOL5 = [
         'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+          '8f2YCqTRCwqMmmifmeB5qDkaduZfPQmfDWZZU5bqf1En',
         'HipXwn3m4XRaEVP4ak82rGD1AR8wHQBGNkcAsjXizXqJ',
         '4yjrobNPWfwK9PkPQQ3HsiNhjKRAEi2gBxMtth7UTa3t',
         '3a3fDgsnhydFTksXoAjHWec4iDR7ZNApAppkCG4gbJ4n',
@@ -217,44 +253,31 @@ export default Vue.extend({
           let tokenInfo = getTokenByMintAddress(this.tokenAccounts[i])
           if (tokenInfo != null) {
             //@ts-ignore
-            this.SOL5Balances[tokenInfo.symbol] = this.tokenBalances[this.tokenAccounts[i]].balance.wei / 10 ** 6
-            if (prices['SOL'] != undefined && tokenInfo.symbol != 'USDC') {
+            if (tokenInfo.symbol == 'SOL5' || tokenInfo.symbol == 'USDC')
               //@ts-ignore
-              totalValue += this.SOL5Balances[tokenInfo.symbol] * prices[tokenInfo.symbol]
-              //@ts-ignore
-              this.SOL5Value[tokenInfo.symbol] = this.SOL5Balances[tokenInfo.symbol] * prices[tokenInfo.symbol]
+              this.SOL5Balances[tokenInfo.symbol] = this.tokenBalances[this.tokenAccounts[i]].balance.wei / 10 ** 6
             }
-            // this.tokenBalances[tokenInfo.mintAddress].symbol = tokenInfo.symbol
-            // this.tokenBalances[tokenInfo.mintAddress].name = tokenInfo.name
           }
         }
-      }
+
 
       this.ETFValue = totalValue
+      },
 
-      let tokens = Object.keys(this.SOL5Balances)
-      for (let i = 1; i < tokens.length; i++) {
-        //@ts-ignore
-        if (this.SOL5Balances[i] == 0)
-          continue
-        //@ts-ignore
-        this.SOL5Allocation[tokens[i]] = ((this.SOL5Balances[tokens[i]] * prices[tokens[i]]) / totalValue) * 100
-      }
-
-    },
-
-    async get_etf_weights() {
+    get_etf_weights() {
       const conn = this.$web3
       const wallet = (this as any).$wallet
 
-      let weights = await getWeights(conn, wallet);
-      let total = 0
-      for (let i = 0; i < weights.length; i++)
-      {
-        total += Number(weights[i])
-        console.log(weights[i].toString())
-      }
-      console.log('tot', total)
+      let weights = getWeights(conn, wallet).then((weights) => {
+        let total = 0
+        for (let i = 0; i < weights.length; i++)
+        {
+          total += Number(weights[i])
+          this.weights[Object.keys(this.tokenList)[i]] = weights[i]
+          console.log(this.weights)
+        }
+        this.totalWeight = total
+      })
     },
 
     getBalances() {
