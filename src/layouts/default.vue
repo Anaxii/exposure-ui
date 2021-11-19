@@ -20,6 +20,7 @@
 import {Vue, Component} from 'nuxt-property-decorator'
 import {Layout} from 'ant-design-vue'
 import Header from '@/components/Header.vue'
+import {WEIGHTS} from '@/utils/exposure'
 
 import {
   CThemeProvider, CBadge, CButton, CMenu,
@@ -56,7 +57,7 @@ export default class Default extends Vue {
   mounted() {
     if (this.$route.fullPath != '/' && this.$route.fullPath != '/deepdive' && this.$route.fullPath != '/community' && this.$route.fullPath != '/products' && this.$route.fullPath != '/admin' &&
         this.$route.fullPath != '/' && this.$route.fullPath != '/deepdive/' && this.$route.fullPath != '/community/' && this.$route.fullPath != '/products/') {
-
+      console.log(this.$accessor.wallet.connected)
       if (!this.$accessor.wallet.connected){
         this.$router.push({path: '/connect'})
       }

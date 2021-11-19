@@ -16,6 +16,7 @@ import {TokenAmount, lt, lte, isNullOrZero} from '@/utils/safe-math'
 import {formatToMoneyNum, getNumber} from '@/utils'
 import BigNumber from 'bignumber.js'
 const CollapsePanel = Collapse.Panel
+import {getWeights, WEIGHTS} from "@/utils/exposure";
 
 export default Vue.extend({
   components: {
@@ -67,6 +68,19 @@ export default Vue.extend({
   mounted() {
     // @ts-ignore
     this.$accessor.wallet.getTokenAccounts()
+    const conn = this.$web3
+    const wallet = (this as any).$wallet
+
+    getWeights(conn, wallet).then((weights) => {
+      // let total = 0
+      // for (let i = 0; i < weights.length; i++)
+      // {
+      //   total += Number(weights[i])
+      //   this.weights[Object.keys(this.tokenList)[i]] = weights[i]
+      //   console.log(this.weights)
+      // }
+      // this.totalWeight = total
+    })
     this.changePageInterval = window.setInterval(() => {
       this.checkBalance()
     }, 1000)
@@ -84,8 +98,9 @@ export default Vue.extend({
 
     checkBalance() {
       let balance = Object.keys(this.$accessor.wallet.balances).length
-      if (balance > 0)
+      if (balance > 0 && WEIGHTS.length == 5) {
         this.changePage()
+      }
     },
 
     changePage() {

@@ -10,7 +10,7 @@
           </div>
           <div style="margin-left: auto;margin-right: auto;width: 330px">
             <div style="margin-left: auto;margin-right: auto">
-              <input type="number"  ref="amount" class="arrowbtn" v-model="shares"
+              <input type="number" ref="amount" class="arrowbtn" v-model="shares"
                      style="text-align: center;font-size: 14px;width: 100%; padding-top: 1.5%; cursor: text; padding-bottom: 1.5%;background: transparent; color: white; border: 3px solid white; border-radius: 15px; outline: none !important"
                      placeholder="Amount of Shares"/>
             </div>
@@ -18,18 +18,18 @@
           <div style="width: 330px; padding-top: 25px">
             <button class="arrowbtn" style="padding: 0 !important" @click="create_shares()">Create</button>
           </div>
-<!--            <div style="width: 330px; padding-top: 25px">-->
-<!--            <button class="arrowbtn" style="padding: 0 !important" @click="churn()">Churn ETF Weights</button>-->
-<!--          </div>-->
-<!--          <div style="width: 330px; padding-top: 25px">-->
-<!--            <button class="arrowbtn" style="padding: 0 !important" @click="get_etf_weights()">Get ETF Weights</button>-->
-<!--          </div>-->
-<!--          <div style="width: 330px; padding-top: 25px">-->
-<!--            <button class="arrowbtn" style="padding: 0 !important" @click="create_etf()">Create ETF</button>-->
-<!--          </div>-->
-<!--          <div style="width: 330px; padding-top: 25px">-->
-<!--            <button class="arrowbtn" style="padding: 0 !important" @click="add_assets()">Add Assets</button>-->
-<!--          </div>-->
+          <!--            <div style="width: 330px; padding-top: 25px">-->
+          <!--            <button class="arrowbtn" style="padding: 0 !important" @click="churn()">Churn ETF Weights</button>-->
+          <!--          </div>-->
+          <!--          <div style="width: 330px; padding-top: 25px">-->
+          <!--            <button class="arrowbtn" style="padding: 0 !important" @click="get_etf_weights()">Get ETF Weights</button>-->
+          <!--          </div>-->
+          <!--          <div style="width: 330px; padding-top: 25px">-->
+          <!--            <button class="arrowbtn" style="padding: 0 !important" @click="create_etf()">Create ETF</button>-->
+          <!--          </div>-->
+          <!--          <div style="width: 330px; padding-top: 25px">-->
+          <!--            <button class="arrowbtn" style="padding: 0 !important" @click="add_assets()">Add Assets</button>-->
+          <!--          </div>-->
         </div>
       </div>
     </div>
@@ -45,12 +45,19 @@ import {TokenAmount, lt, lte, isNullOrZero} from '@/utils/safe-math'
 import {formatToMoneyNum, getNumber} from '@/utils'
 import BigNumber from 'bignumber.js'
 import {CreateMultiSIG} from "@/utils/vault";
-import {CreateExposureShares, getWeights, churnWeight,CreateETF, AddAsset, RedeemExposureShares} from "@/utils/exposure";
+import {
+  CreateExposureShares,
+  getWeights,
+  churnWeight,
+  CreateETF,
+  AddAsset,
+  RedeemExposureShares
+} from "@/utils/exposure";
+
 const CollapsePanel = Collapse.Panel
 
 export default Vue.extend({
-  components: {
-  },
+  components: {},
 
   data() {
     return {
@@ -103,15 +110,13 @@ export default Vue.extend({
       const conn = this.$web3
       const wallet = (this as any).$wallet
 
-      if(this.shares){
-        if(Number(this.shares) != 0)
-        {
-          let amount = Number(this.shares) * 100000000;
+      if (this.shares != '') {
+        if (Number(this.shares) != 0) {
           console.log(this.shares)
+
+          let amount = Number(this.shares) * 100000000;
           let create = await CreateExposureShares(conn, wallet, amount)
-        }
-        else 
-        {
+        } else {
           //error
         }
 
@@ -129,26 +134,25 @@ export default Vue.extend({
       const wallet = (this as any).$wallet
 
       let weights = await getWeights(conn, wallet);
-      for (var i = 0; i < weights.length;i++)
-      {
+      for (var i = 0; i < weights.length; i++) {
         console.log(weights[i].toString())
       }
     },
 
-    async create_etf(){
+    async create_etf() {
       const conn = this.$web3
       const wallet = (this as any).$wallet
-      
+
       let tx_1 = await CreateETF(conn, wallet)
     },
 
-    async add_assets(){
+    async add_assets() {
       const conn = this.$web3
       const wallet = (this as any).$wallet
 
 
-      for( var i = 0; i < 5;i++) {
-        let tx = await AddAsset(conn, wallet,i )
+      for (var i = 0; i < 5; i++) {
+        let tx = await AddAsset(conn, wallet, i)
       }
     },
 

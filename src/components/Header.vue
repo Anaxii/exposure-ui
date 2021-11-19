@@ -109,12 +109,6 @@
         </div>
       </div>
     </div>
-    <div v-if="this.size !== 'small'" class="announcement">
-      <div style="margin-top: auto">
-        <p style="font-size: 18px">The Exposure team is competing in the Solana Hackathon!&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a
-            href="https://ignition.devpost.com/" target="_blank">Announcement &#9754;</a></p>
-      </div>
-    </div>
   </div>
 </template>
 

@@ -114,19 +114,9 @@ export default Vue.extend({
     async redeem(){
       const conn = this.$web3
       const wallet = (this as any).$wallet
-
-      if(this.shares){
-        if(Number(this.shares) != 0)
-        {
-          let amount = Number(this.shares) * 100000000;
-          console.log(this.shares)
-          let create = await RedeemExposureShares(conn, wallet, amount)
-        }
-        else 
-        {
-          //error
-        }
-
+      if (this.shares !== '') {
+        let amount = Number(this.shares) * 100000000;
+        let tx = await RedeemExposureShares(conn, wallet, amount)
       }
     },
 

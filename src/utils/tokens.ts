@@ -106,6 +106,14 @@ export const TOKENS: Tokens = {
     referrer: 'HTcarLHe7WRxBQCWvhVB8AP56pnEtJUV2jDGvcpY3xo5',
     tags: ['raydium']
   },
+  SOL5: {
+    symbol: 'SOL5',
+    name: 'SOL5',
+    mintAddress: '8f2YCqTRCwqMmmifmeB5qDkaduZfPQmfDWZZU5bqf1En',
+    decimals: 9,
+    referrer: 'HTcarLHe7WRxBQCWvhVB8AP56pnEtJUV2jDGvcpY3xo5',
+    tags: ['raydium']
+  },
   C: {
     symbol: 'C',
     name: 'C',
