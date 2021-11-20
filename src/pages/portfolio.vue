@@ -33,6 +33,18 @@
                 }}%</p>
               <p style="font-size: 14px; color: #959595; line-height: 0.1">ETF Shares Value</p>
               <p style="font-size: 24px">${{ this.ETFValue.toLocaleString() }}</p>
+
+              <div style="margin-right:auto;margin-legt:auto;width: 330px">
+              <input type="number" ref="amount" class="arrowbtn" v-model="shares"
+                     style="text-align: center;font-size: 14px;width: 100%; padding-top: 1.5%; cursor: text; padding-bottom: 1.5%;background: transparent; color: white; border: 3px solid white; border-radius: 15px; outline: none !important"
+                     placeholder="Amount of Shares"/>
+          </div>
+            <div style="width: 330px; padding-top: 25px">
+              <button class="arrowbtn" style="display:inline-block;margin:0 auto;padding: 0 !important" @click="create_shares()">Create</button>
+            </div>
+            <div style="width: 330px; padding-top: 25px">
+              <button class="arrowbtn" style="display:inline-block;margin:0 auto;padding: 0 !important" @click="redeem()">Redeem</button>
+            </div>
             </div>
           </div>
         </div>
@@ -69,11 +81,7 @@
                 {{ item }}
               </p>
               <p>
-              <span>{{ (SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply))).toFixed(2)}}</span><span style="color:grey;font-weight:200;">{{
-              
-              (((SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * 100) - 
-               (SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * 100).toFixed(0)) * 10000).toFixed(0)
-              }}</span>
+              <span>{{ (SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply))).toFixed(2)}}</span>
               </p>
               <p>
                 ${{ prices[item].toFixed(2).toLocaleString() }}
@@ -99,7 +107,7 @@ import {mapState} from 'vuex'
 import {Alert} from 'ant-design-vue'
 import {getTokenByMintAddress} from "@/utils/tokens";
 import PieChart from "@/chart/PieChart";
-import {getSupply, getWeights, getUnderlyingAssetsInVault, WEIGHTS, getPrice} from "@/utils/exposure";
+import {getSupply, getWeights, getUnderlyingAssetsInVault, WEIGHTS, getPrice, CreateExposureShares, RedeemExposureShares} from "@/utils/exposure";
 
 export default Vue.extend({
   components: {
@@ -115,6 +123,7 @@ export default Vue.extend({
       USDValue: 0,
       ETFValue: 0,
       etfSupply: 0,
+      shares: '',
       SOL5Balances: {
         USDC: 0,
         SOL5: 0,
@@ -218,6 +227,30 @@ export default Vue.extend({
   },
 
   methods: {
+    async create_shares() {
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
+
+      if (this.shares != '') {
+        if (Number(this.shares) != 0) {
+          console.log(this.shares)
+
+          let amount = Number(this.shares) * 100000000;
+          let create = await CreateExposureShares(conn, wallet, amount)
+        } else {
+          //error
+        }
+
+      }
+    },
+    async redeem(){
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
+      if (this.shares !== '') {
+        let amount = Number(this.shares) * 100000000;
+        let tx = await RedeemExposureShares(conn, wallet, amount)
+      }
+    },
     updateBalances() {
       const SOL5 = [
         'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
@@ -316,6 +349,39 @@ export default Vue.extend({
 
 <style lang="less" scoped>
 /* stylelint-disable */
+
+.arrowbtn {
+  display: block;
+  height: 35px;
+  cursor: pointer;
+  line-height: 32.5px;
+  text-decoration: none;
+  text-align: center;
+  letter-spacing: 1px;
+  border-radius: 25px;
+  border: 3px solid rgba(54, 109, 241, 1);
+  background: transparent;
+  font-weight: bold;
+  color: rgb(217, 217, 217);
+  transition: all .35s;
+  width: 100%;
+
+}
+
+.arrowbtn:hover {
+  width: 100%;
+  color: rgb(186, 112, 251);
+  border: 3px solid rgb(186, 112, 251);
+  background: transparent;
+}
+
+.arrowbtn:focus {
+  width: 100%;
+  border: 3px solid rgb(186, 112, 251) !important;
+  background: transparent;
+}
+
+
 
 p {
   font-size: 14px
