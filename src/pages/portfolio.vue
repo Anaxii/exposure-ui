@@ -21,10 +21,10 @@
           </div>
           <div>
             <div style="width: 70%; margin: 0 10%; padding: 10% 0;">
-              <p style="font-size: 14px; color: #959595; line-height: 0.1">USDC Balance</p>
-              <p style="font-size: 24px">{{ this.SOL5Balances.USDC.toLocaleString() }}</p>
-              <p style="font-size: 14px; color: #959595; line-height: 0.1">Wallet Value</p>
-              <p style="font-size: 24px">${{ (this.ETFValue + this.SOL5Balances.USDC).toLocaleString() }}</p>
+<!--              <p style="font-size: 14px; color: #959595; line-height: 0.1">USDC Balance</p>-->
+<!--              <p style="font-size: 24px">{{ this.SOL5Balances.USDC.toLocaleString() }}</p>-->
+<!--              <p style="font-size: 14px; color: #959595; line-height: 0.1">Wallet Value</p>-->
+<!--              <p style="font-size: 24px">${{ (this.ETFValue + this.SOL5Balances.USDC).toLocaleString() }}</p>-->
               <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Shares</p>
               <p style="font-size: 24px">{{ (this.SOL5Balances.SOL5 / 100).toLocaleString() }}</p>
               <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Equity</p>
@@ -72,10 +72,10 @@
                 {{ SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) }}
               </p>
               <p>
-                ${{ tokenPrices[item] }}
+                ${{ prices[item].toLocaleString() }}
               </p>
               <p>
-                ${{ SOL5Value[item].toLocaleString() }}
+                ${{ ((SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * prices[item]).toLocaleString()) }}
               </p>
               <p>
                 {{ (weights[item]/1e6).toFixed(4)}}%
@@ -95,7 +95,7 @@ import {mapState} from 'vuex'
 import {Alert} from 'ant-design-vue'
 import {getTokenByMintAddress} from "@/utils/tokens";
 import PieChart from "@/chart/PieChart";
-import {getSupply, getWeights, getUnderlyingAssetsInVault, WEIGHTS} from "@/utils/exposure";
+import {getSupply, getWeights, getUnderlyingAssetsInVault, WEIGHTS, getPrice} from "@/utils/exposure";
 
 export default Vue.extend({
   components: {
@@ -119,6 +119,13 @@ export default Vue.extend({
         C: 0,
         D: 0,
         E: 0
+      },
+      prices: {
+          A: 0,
+          B: 0,
+          C: 0,
+          D: 0,
+          E: 0
       },
       SOL5Allocation: {
         USDC: 0,
@@ -190,44 +197,20 @@ export default Vue.extend({
   watch: {},
 
   mounted() {
-    let total = 0
     let _weight = {}
     for (let i = 0; i < WEIGHTS.length; i++) {
+      //@ts-ignore
       _weight[this.tokenList[i]] = Number(WEIGHTS[i])
     }
-    this.totalWeight = total
+    //@ts-ignore
     this.weights = _weight
 
     this.$accessor.price.requestPrices()
     this.$accessor.wallet.getTokenAccounts()
     this.updateBalances()
-    const conn = this.$web3
-    const wallet = (this as any).$wallet
 
-    getSupply(conn, wallet, 5).then((result) => {
-      let r = (Number(result) / 1e8).toString()
-      this.etfSupply = Number(r)
-    })
-
-    for (let i = 0; i < this.tokenList.length; i++) {
-      getUnderlyingAssetsInVault(conn, wallet, i).then((result) => {
-        //@ts-ignore
-        this.SOL5Balances[this.tokenList[i]] = Number((Number(result) / 1e8).toString())
-      })
-    }
     this.ready = true
     setInterval(this.getBalances, 10000)
-  },
-
-  updated() {
-    const conn = this.$web3
-    const wallet = (this as any).$wallet
-    let supply = getSupply(conn, wallet, 5).then((result) => {
-      let r = (Number(result) / 1e8)
-      this.etfSupply = Number(r)
-    })
-    console.log(this.SOL5Balances)
-    this.getBalances()
   },
 
   methods: {
@@ -253,7 +236,6 @@ export default Vue.extend({
       }
 
       this.tokenPrices = prices
-      let totalValue = 0
 
       let balances = this.$accessor.wallet.balances
       if (balances != null) {
@@ -272,8 +254,35 @@ export default Vue.extend({
         }
       }
 
+      const conn = this.$web3
+      const wallet = (this as any).$wallet
 
-      this.ETFValue = totalValue
+      getSupply(conn, wallet, 5).then((result) => {
+        let r = (Number(result) / 1e8).toString()
+        this.etfSupply = Number(r)
+      })
+
+      let totVal = 0
+      let check = 0
+      for (let i = 0; i < this.tokenList.length; i++) {
+        getPrice(conn, wallet, i).then((result) => {
+          //@ts-ignore
+          this.prices[this.tokenList[i]] = Number(result)
+          for (let i = 0; i < this.tokenList.length; i++) {
+            getUnderlyingAssetsInVault(conn, wallet, i).then((result) => {
+              //@ts-ignore
+              this.SOL5Balances[this.tokenList[i]] = Number((Number(result) / 1e8).toString())
+              //@ts-ignore
+              totVal += (this.SOL5Balances[this.tokenList[i]] * (((this.SOL5Balances.SOL5 / 100) / this.etfSupply)) * this.prices[this.tokenList[i]])
+              check++
+              if ( check === this.tokenList.length * 5) {
+                this.ETFValue = totVal
+              }
+            })
+          }
+        })
+      }
+
     },
 
     get_etf_weights() {
@@ -284,8 +293,8 @@ export default Vue.extend({
         let total = 0
         for (let i = 0; i < weights.length; i++) {
           total += Number(weights[i])
-          this.weights[Object.keys(this.tokenList)[i]] = weights[i]
-          console.log(this.weights)
+          //@ts-ignore
+          this.weights[this.tokenList[i]] = Number(weights[i])
         }
         this.totalWeight = total
       })
