@@ -55,10 +55,10 @@
                 Price
               </p>
               <p style="color: #959595; margin-bottom: 0">
-                Value
+                Allocation Value
               </p>
               <p style="color: #959595; margin-bottom: 0">
-                Allocation
+                Allocation %
               </p>
             </div>
           </div>
@@ -72,10 +72,10 @@
                 {{ SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) }}
               </p>
               <p>
-                ${{ prices[item].toLocaleString() }}
+                ${{ prices[item].toFixed(2).toLocaleString() }}
               </p>
               <p>
-                ${{ ((SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * prices[item]).toLocaleString()) }}
+                ${{ ((SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * prices[item]).toFixed(2).toLocaleString()) }}
               </p>
               <p>
                 {{ (weights[item]/1e6).toFixed(4)}}%
