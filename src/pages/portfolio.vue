@@ -69,7 +69,11 @@
                 {{ item }}
               </p>
               <p>
-                {{ SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) }}
+              <span>{{ (SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply))).toFixed(2)}}</span><span style="color:grey;font-weight:200;">{{
+              
+              (((SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * 100) - 
+               (SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * 100).toFixed(0)) * 10000).toFixed(0)
+              }}</span>
               </p>
               <p>
                 ${{ prices[item].toFixed(2).toLocaleString() }}
@@ -78,7 +82,7 @@
                 ${{ ((SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * prices[item]).toFixed(2).toLocaleString()) }}
               </p>
               <p>
-                {{ (weights[item]/1e6).toFixed(4)}}%
+                <span>{{ (weights[item]/1e6).toFixed(2)}}</span>%
               </p>
             </div>
           </div>
