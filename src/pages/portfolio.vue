@@ -19,32 +19,54 @@
               </div>
             </div>
           </div>
-          <div>
+          <div style="width: 90%; margin-left: auto; margin-right: auto">
             <div style="width: 70%; margin: 0 10%; padding: 10% 0;">
-<!--              <p style="font-size: 14px; color: #959595; line-height: 0.1">USDC Balance</p>-->
-<!--              <p style="font-size: 24px">{{ this.SOL5Balances.USDC.toLocaleString() }}</p>-->
-<!--              <p style="font-size: 14px; color: #959595; line-height: 0.1">Wallet Value</p>-->
-<!--              <p style="font-size: 24px">${{ (this.ETFValue + this.SOL5Balances.USDC).toLocaleString() }}</p>-->
-              <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Shares</p>
-              <p style="font-size: 24px">{{ (this.SOL5Balances.SOL5 / 100).toLocaleString() }}</p>
-              <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Equity</p>
-              <p style="font-size: 24px">{{
-                  (((this.SOL5Balances.SOL5 / 100) / this.etfSupply) * 100).toLocaleString()
-                }}%</p>
-              <p style="font-size: 14px; color: #959595; line-height: 0.1">ETF Shares Value</p>
-              <p style="font-size: 24px">${{ this.ETFValue.toLocaleString() }}</p>
+              <!--              <p style="font-size: 14px; color: #959595; line-height: 0.1">USDC Balance</p>-->
+              <!--              <p style="font-size: 24px">{{ this.SOL5Balances.USDC.toLocaleString() }}</p>-->
+              <!--              <p style="font-size: 14px; color: #959595; line-height: 0.1">Wallet Value</p>-->
 
-              <div style="margin-right:auto;margin-legt:auto;width: 330px">
-              <input type="number" ref="amount" class="arrowbtn" v-model="shares"
-                     style="text-align: center;font-size: 14px;width: 100%; padding-top: 1.5%; cursor: text; padding-bottom: 1.5%;background: transparent; color: white; border: 3px solid white; border-radius: 15px; outline: none !important"
-                     placeholder="Amount of Shares"/>
-          </div>
-            <div style="width: 330px; padding-top: 25px">
-              <button class="arrowbtn" style="display:inline-block;margin:0 auto;padding: 0 !important" @click="create_shares()">Create</button>
-            </div>
-            <div style="width: 330px; padding-top: 25px">
-              <button class="arrowbtn" style="display:inline-block;margin:0 auto;padding: 0 !important" @click="redeem()">Redeem</button>
-            </div>
+              <!--              <p style="font-size: 24px">${{ (this.ETFValue + this.SOL5Balances.USDC).toLocaleString() }}</p>-->
+              <div>
+                <div
+                    style="width: 90%; display: grid; text-align: center; grid-template-columns: 1fr 1fr; ; margin-left: auto; margin-right: auto; padding-bottom: 1%">
+                  <div>
+                    <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Shares</p>
+                    <p style="font-size: 24px">{{ (this.SOL5Balances.SOL5 / 100).toLocaleString() }}</p>
+                  </div>
+                  <div>
+                    <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Equity</p>
+                    <p style="font-size: 24px">{{
+                        (this.SOL5Balances.SOL5 / this.etfSupply).toLocaleString()
+                      }}%</p>
+                  </div>
+                </div>
+                <div
+                    style="width: 90%; display: grid; text-align: center; grid-template-columns: 1fr 1fr; margin-left: auto; margin-right: auto; padding-bottom: 1%">
+                  <div>
+                    <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 Shares Value</p>
+                    <p style="font-size: 24px">${{ this.ETFValue.toLocaleString() }}</p>
+                  </div>
+                  <div>
+                    <p style="font-size: 14px; color: #959595; line-height: 0.1">Total SOL5 Value</p>
+                    <p style="font-size: 24px">${{ this.sol5Value.toLocaleString() }}</p>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-right:auto;margin-left:auto;width: 330px">
+                <input type="number" ref="amount" class="arrowbtn" v-model="shares"
+                       style="text-align: center;font-size: 14px;width: 100%; padding-top: 1.5%; cursor: text; padding-bottom: 1.5%;background: transparent; color: white; border: 3px solid white; border-radius: 15px; outline: none !important"
+                       placeholder="Number of Shares"/>
+              </div>
+              <div style="margin-right:auto;margin-left:auto;width: 330px; padding-top: 25px">
+                <button class="arrowbtn" style="display:inline-block;margin:0 auto;padding: 0 !important"
+                        @click="create_shares()">Create
+                </button>
+              </div>
+              <div style="margin-right:auto;margin-left:auto;width: 330px; padding-top: 25px">
+                <button class="arrowbtn" style="display:inline-block;margin:0 auto;padding: 0 !important"
+                        @click="redeem()">Redeem
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -81,16 +103,18 @@
                 {{ item }}
               </p>
               <p>
-              <span>{{ (SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply))).toFixed(2)}}</span>
+                <span>{{ (SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply))).toFixed(2) }}</span>
               </p>
               <p>
                 ${{ prices[item].toFixed(2).toLocaleString() }}
               </p>
               <p>
-                ${{ ((SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * prices[item]).toFixed(2).toLocaleString()) }}
+                ${{
+                  ((SOL5Balances[item] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * prices[item]).toFixed(2).toLocaleString())
+                }}
               </p>
               <p>
-                <span>{{ (weights[item]/1e6).toFixed(2)}}</span>%
+                <span>{{ (weights[item] / 1e6).toFixed(2) }}</span>%
               </p>
             </div>
           </div>
@@ -107,7 +131,16 @@ import {mapState} from 'vuex'
 import {Alert} from 'ant-design-vue'
 import {getTokenByMintAddress} from "@/utils/tokens";
 import PieChart from "@/chart/PieChart";
-import {getSupply, getWeights, getUnderlyingAssetsInVault, WEIGHTS, getPrice, CreateExposureShares, RedeemExposureShares} from "@/utils/exposure";
+import {
+  getSupply,
+  getWeights,
+  getUnderlyingAssetsInVault,
+  WEIGHTS,
+  ETFSUPPLY,
+  getPrice,
+  CreateExposureShares,
+  RedeemExposureShares, ETFVALUE
+} from "@/utils/exposure";
 
 export default Vue.extend({
   components: {
@@ -124,6 +157,7 @@ export default Vue.extend({
       ETFValue: 0,
       etfSupply: 0,
       shares: '',
+      sol5Value: 0,
       SOL5Balances: {
         USDC: 0,
         SOL5: 0,
@@ -134,11 +168,11 @@ export default Vue.extend({
         E: 0
       },
       prices: {
-          A: 0,
-          B: 0,
-          C: 0,
-          D: 0,
-          E: 0
+        A: 0,
+        B: 0,
+        C: 0,
+        D: 0,
+        E: 0
       },
       SOL5Allocation: {
         USDC: 0,
@@ -192,7 +226,7 @@ export default Vue.extend({
           {
             label: "Data One",
             backgroundColor: ["#a37bff", "#b400ff", "#7c1fff", "#DC1FFF", "#c67bff"],
-            data: [(Number(WEIGHTS[0])/1e6).toFixed(4), (Number(WEIGHTS[1])/1e6).toFixed(4), (Number(WEIGHTS[2])/1e6).toFixed(4), (Number(WEIGHTS[3])/1e6).toFixed(4), (Number(WEIGHTS[4])/1e6).toFixed(4)]
+            data: [(Number(WEIGHTS[0]) / 1e6).toFixed(4), (Number(WEIGHTS[1]) / 1e6).toFixed(4), (Number(WEIGHTS[2]) / 1e6).toFixed(4), (Number(WEIGHTS[3]) / 1e6).toFixed(4), (Number(WEIGHTS[4]) / 1e6).toFixed(4)]
           }
         ]
       }
@@ -210,6 +244,7 @@ export default Vue.extend({
   watch: {},
 
   mounted() {
+    console.log('ETF', ETFSUPPLY)
     let _weight = {}
     for (let i = 0; i < WEIGHTS.length; i++) {
       //@ts-ignore
@@ -218,7 +253,7 @@ export default Vue.extend({
     //@ts-ignore
     this.weights = _weight
 
-    this.$accessor.price.requestPrices()
+    // this.$accessor.price.requestPrices()
     this.$accessor.wallet.getTokenAccounts()
     this.updateBalances()
 
@@ -228,12 +263,13 @@ export default Vue.extend({
 
   methods: {
     async create_shares() {
+      //handle estimated max shares based on weights
+
       const conn = this.$web3
       const wallet = (this as any).$wallet
 
       if (this.shares != '') {
         if (Number(this.shares) != 0) {
-          console.log(this.shares)
 
           let amount = Number(this.shares) * 100000000;
           let create = await CreateExposureShares(conn, wallet, amount)
@@ -243,10 +279,14 @@ export default Vue.extend({
 
       }
     },
-    async redeem(){
-      const conn = this.$web3
-      const wallet = (this as any).$wallet
+    async redeem() {
+      if (this.shares > this.SOL5Balances.SOL5) {
+        //handle greater than max
+        return
+      }
       if (this.shares !== '') {
+        const conn = this.$web3
+        const wallet = (this as any).$wallet
         let amount = Number(this.shares) * 100000000;
         let tx = await RedeemExposureShares(conn, wallet, amount)
       }
@@ -312,8 +352,9 @@ export default Vue.extend({
               //@ts-ignore
               totVal += (this.SOL5Balances[this.tokenList[i]] * (((this.SOL5Balances.SOL5 / 100) / this.etfSupply)) * this.prices[this.tokenList[i]])
               check++
-              if ( check === this.tokenList.length * 5) {
+              if (check === this.tokenList.length * 5) {
                 this.ETFValue = totVal
+                this.sol5Value = this.ETFValue / (this.SOL5Balances.SOL5 / this.etfSupply / 100)
               }
             })
           }
@@ -380,7 +421,6 @@ export default Vue.extend({
   border: 3px solid rgb(186, 112, 251) !important;
   background: transparent;
 }
-
 
 
 p {

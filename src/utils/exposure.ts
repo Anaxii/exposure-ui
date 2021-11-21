@@ -18,7 +18,7 @@ import {TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, SYSTEM_PROGRAM_ID, RENT_P
 import assert from 'assert'
 import {initializeAccount} from '@project-serum/serum/lib/token-instructions'
 import {struct} from 'superstruct'
-import {TOKENS} from '@/utils/tokens'
+import {getTokenByMintAddress, TOKENS} from '@/utils/tokens'
 
 const anchor = require("@project-serum/anchor");
 const programId = new anchor.web3.PublicKey('56GhY3o3fZh5dZ1bU4vbxC5mxBfpjCjakDCsUQBxwqjN');
@@ -27,7 +27,13 @@ import {idl} from './programs/exposure_etf'
 const {Market} = require("@project-serum/serum");
 const DEX_PID = new PublicKey("DESVgJVGajEgKGXhb6XmqDHGz3VjdgP7rEVESBgxmroY");
 
-export var WEIGHTS =[]
+export var WEIGHTS = []
+export var ETFVALUE = 0
+export var ETFSUPPLY = 0
+export var SOL5BALANCES = {}
+export var SOL5VALUE = 0
+export var PRICES = {}
+
 var ETF_TOKEN = new anchor.web3.PublicKey("8f2YCqTRCwqMmmifmeB5qDkaduZfPQmfDWZZU5bqf1En");
 var etf = new anchor.web3.PublicKey("CfV6JkALiizjKLVjPVWVGuShZ7pb7uoF5F9WjD88T2FZ");
 
@@ -56,6 +62,102 @@ var TOKEN_D_MARKET_BIDS = new anchor.web3.PublicKey("3EJ6UwvAvk2daXpqDuPJjy4ErKp
 var TOKEN_E_MARKET_BIDS = new anchor.web3.PublicKey("FJa3oLeAKyFdhpNE7js9LKnSbeFBdhnY7bBTxknAjW3w");
 
 var ETF_PROGRAM = new anchor.web3.PublicKey("56GhY3o3fZh5dZ1bU4vbxC5mxBfpjCjakDCsUQBxwqjN");
+
+export function preload(
+    conn: any,
+    wallet: any | undefined | null,
+    balances: {}) {
+    if (!conn || !wallet) throw new Error('Missing connection')
+
+    const SOL5 = [
+        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+        '8f2YCqTRCwqMmmifmeB5qDkaduZfPQmfDWZZU5bqf1En',
+        'HipXwn3m4XRaEVP4ak82rGD1AR8wHQBGNkcAsjXizXqJ',
+        '4yjrobNPWfwK9PkPQQ3HsiNhjKRAEi2gBxMtth7UTa3t',
+        '3a3fDgsnhydFTksXoAjHWec4iDR7ZNApAppkCG4gbJ4n',
+        'DvxzkaiZdnzMYC9aLpNYueVuWHydfW8BcfiAt8hMFVUu',
+        '8ZS9wiKSx1eVpgB67fzFqSTyNTbHKyLmeK7A6nQWf1am'
+    ]
+    let prices = {
+        A: 0,
+        B: 0,
+        C: 0,
+        D: 0,
+        E: 0
+    }
+
+    let tokenPrices = prices
+    let tokenBalances = balances
+    let tokenAccounts = 0
+    let SOL5Balances: {
+        USDC: 0,
+        SOL5: 0,
+        A: 0,
+        B: 0,
+        C: 0,
+        D: 0,
+        E: 0
+    }
+
+    if (balances != null) {
+        let tokenAccounts = Object.keys(balances)
+        for (let i = 0; i < tokenAccounts.length; i++) {
+            if (!SOL5.includes(tokenAccounts[i]))
+                continue
+            let tokenInfo = getTokenByMintAddress(tokenAccounts[i])
+            console.log(tokenInfo, tokenBalances)
+            if (tokenInfo != null) {
+                //@ts-ignore
+                if (tokenInfo.symbol == 'SOL5' || tokenInfo.symbol == 'USDC')
+                    //@ts-ignore
+                    SOL5Balances[tokenInfo.symbol] = tokenBalances[tokenAccounts[i]].balance.wei / 10 ** 6
+            }
+        }
+    }
+
+    getWeights(conn, wallet)
+    let etfSupply = 0
+
+    getSupply(conn, wallet, 5).then((result) => {
+        let r = (Number(result) / 1e8).toString()
+        etfSupply = Number(r)
+    })
+
+    let tokenList = [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E'
+    ]
+
+    let totVal = 0
+    let check = 0
+    for (let i = 0; i < tokenList.length; i++) {
+        getPrice(conn, wallet, i).then((result) => {
+            //@ts-ignore
+            prices[tokenList[i]] = Number(result)
+            for (let i = 0; i < tokenList.length; i++) {
+                getUnderlyingAssetsInVault(conn, wallet, i).then((result) => {
+                    //@ts-ignore
+                    SOL5Balances[tokenList[i]] = Number((Number(result) / 1e8).toString())
+                    //@ts-ignore
+                    totVal += (SOL5Balances[tokenList[i]] * (((SOL5Balances.SOL5 / 100) / etfSupply)) * prices[this.tokenList[i]])
+                    check++
+                    if (check === tokenList.length * 5) {
+                        ETFVALUE = totVal
+                        SOL5VALUE = ETFVALUE / (SOL5Balances.SOL5 / etfSupply / 100)
+                        SOL5BALANCES = SOL5Balances
+                        PRICES = prices
+                        ETFSUPPLY = etfSupply
+                        return true
+                    }
+                })
+            }
+        })
+    }
+
+}
 
 function getTokenClient(
     conn: any,
@@ -122,7 +224,7 @@ export async function getPrice(
     let bids = await market.loadBids(conn);
 
     return bids.getL2(1)[0][0];
-  }
+}
 
 export async function getSupply(
     conn: any,

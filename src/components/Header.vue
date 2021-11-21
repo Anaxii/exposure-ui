@@ -51,18 +51,18 @@
 <!--        <p class="highlight" @click="nav('/purchase')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">-->
 <!--          Purchase-->
 <!--        </p>-->
-        <p v-if="this.$route.fullPath === '/create' || this.$route.fullPath === '/create/'" class="antihighlight">
-          Create
-        </p>
-        <p class="highlight" @click="nav('/create')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">
-          Create
-        </p>
-        <p v-if="this.$route.fullPath === '/redeem' || this.$route.fullPath === '/redeem/'" class="antihighlight">
-          Redeem
-        </p>
-        <p class="highlight" @click="nav('/redeem')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">
-          Redeem
-        </p>
+<!--        <p v-if="this.$route.fullPath === '/create' || this.$route.fullPath === '/create/'" class="antihighlight">-->
+<!--          Create-->
+<!--        </p>-->
+<!--        <p class="highlight" @click="nav('/create')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">-->
+<!--          Create-->
+<!--        </p>-->
+<!--        <p v-if="this.$route.fullPath === '/redeem' || this.$route.fullPath === '/redeem/'" class="antihighlight">-->
+<!--          Redeem-->
+<!--        </p>-->
+<!--        <p class="highlight" @click="nav('/redeem')" v-else v-chakra="{':hover': { textColor: '#3fbbfe'},':focus': { fontColor: '#3fbbfe'}}">-->
+<!--          Redeem-->
+<!--        </p>-->
 <!--        <p v-if="this.$route.fullPath === '/faucet' || this.$route.fullPath === '/faucet/'" class="antihighlight">-->
 <!--          Faucet-->
 <!--        </p>-->
