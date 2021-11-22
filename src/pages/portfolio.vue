@@ -47,7 +47,7 @@
                     <p style="font-size: 24px">${{ this.ETFValue.toLocaleString() }}</p>
                   </div>
                   <div>
-                    <p style="font-size: 14px; color: #959595; line-height: 0.1">Total SOL5 Value</p>
+                    <p style="font-size: 14px; color: #959595; line-height: 0.1">SOL5 MCAP</p>
                     <p style="font-size: 24px">${{ this.sol5Value.toLocaleString() }}</p>
                   </div>
                 </div>
@@ -352,6 +352,7 @@ export default Vue.extend({
               this.SOL5Balances[this.tokenList[i]] = Number((Number(result) / 1e8).toString())
               //@ts-ignore
               yourTotVal += (this.SOL5Balances[this.tokenList[i]] * (((this.SOL5Balances.SOL5 / 100) / this.etfSupply)) * this.prices[this.tokenList[i]])
+              //@ts-ignore
               totVal += Number((Number(result) / 1e8)) * this.prices[this.tokenList[i]]
               check++
               if (check === this.tokenList.length * 5) {
