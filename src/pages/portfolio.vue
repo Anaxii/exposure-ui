@@ -280,10 +280,10 @@ export default Vue.extend({
       }
     },
     async redeem() {
-      if (this.shares > this.SOL5Balances.SOL5) {
+      // if (this.shares > this.SOL5Balances.SOL5) {
         //handle greater than max
-        return
-      }
+      //   return
+      // }
       if (this.shares !== '') {
         const conn = this.$web3
         const wallet = (this as any).$wallet
