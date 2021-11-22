@@ -16,19 +16,7 @@ import {TokenAmount, lt, lte, isNullOrZero} from '@/utils/safe-math'
 import {formatToMoneyNum, getNumber} from '@/utils'
 import BigNumber from 'bignumber.js'
 const CollapsePanel = Collapse.Panel
-import {
-  getPrice,
-  getSupply,
-  getUnderlyingAssetsInVault,
-  getWeights,
-  WEIGHTS,
-  preload,
-  SOL5VALUE,
-  ETFVALUE,
-  PRICES,
-  ETFSUPPLY
-} from "@/utils/exposure";
-import {getTokenByMintAddress} from "@/utils/tokens";
+import {getWeights, WEIGHTS} from "@/utils/exposure";
 
 export default Vue.extend({
   components: {
@@ -46,66 +34,23 @@ export default Vue.extend({
 
   data() {
     return {
-      USDCBalance: 0,
-      tokenAccounts: [] as any,
-      tokenBalances: {} as any,
-      USDValue: 0,
-      ETFValue: 0,
-      etfSupply: 0,
-      shares: '',
-      sol5Value: 0,
-      SOL5Balances: {
-        USDC: 0,
-        SOL5: 0,
-        A: 0,
-        B: 0,
-        C: 0,
-        D: 0,
-        E: 0
-      },
-      prices: {
-        A: 0,
-        B: 0,
-        C: 0,
-        D: 0,
-        E: 0
-      },
-      SOL5Allocation: {
-        USDC: 0,
-        SOL5: 0,
-        A: 0,
-        B: 0,
-        C: 0,
-        D: 0,
-        E: 0
-      },
-      SOL5Value: {
-        USDC: 0,
-        SOL5: 0,
-        A: 0,
-        B: 0,
-        C: 0,
-        D: 0,
-        E: 0
-      },
-      tokenList: [
-        'A',
-        'B',
-        'C',
-        'D',
-        'E'
-      ],
-      assets: {},
-      tokenPrices: {} as any,
-      ready: false,
-      weights: {
-        A: 0,
-        B: 0,
-        C: 0,
-        D: 0,
-        E: 0
-      },
-      totalWeight: 0,
+      isMobile: false,
+
+      farms: [] as any,
+      showFarm: null,
+      currBtnType: 'deposit',
+      lp: null,
+      totalTvl: [] as any,
+      totalFusionTvl: [] as any,
+      allTotalTvl: [] as any,
+      farmInfo: null as any,
+      harvesting: false,
+      stakeModalOpening: false,
+      staking: false,
+      unstakeModalOpening: false,
+      unstaking: false,
+      feeMessage: '0.5% fee for deposit within 3 days' as string,
+      inputValue: '',
       changePageInterval: 0
     }
   },
@@ -123,7 +68,19 @@ export default Vue.extend({
   mounted() {
     // @ts-ignore
     this.$accessor.wallet.getTokenAccounts()
+    const conn = this.$web3
+    const wallet = (this as any).$wallet
 
+    getWeights(conn, wallet).then((weights) => {
+      // let total = 0
+      // for (let i = 0; i < weights.length; i++)
+      // {
+      //   total += Number(weights[i])
+      //   this.weights[Object.keys(this.tokenList)[i]] = weights[i]
+      //   console.log(this.weights)
+      // }
+      // this.totalWeight = total
+    })
     this.changePageInterval = window.setInterval(() => {
       this.checkBalance()
     }, 1000)
@@ -141,21 +98,9 @@ export default Vue.extend({
 
     checkBalance() {
       let balance = Object.keys(this.$accessor.wallet.balances).length
-      if (balance > 0 ) {
-        this.updateBalances()
+      if (balance > 0 && WEIGHTS.length == 5) {
+        this.changePage()
       }
-    },
-
-    updateBalances() {
-      const conn = this.$web3
-      const wallet = (this as any).$wallet
-
-      preload(conn, wallet, this.$accessor.wallet.balances).then((result) => {
-        console.log(ETFSUPPLY)
-
-        console.log(result)
-      })
-
     },
 
     changePage() {
