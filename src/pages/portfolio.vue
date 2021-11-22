@@ -339,6 +339,7 @@ export default Vue.extend({
         this.etfSupply = Number(r)
       })
 
+      let yourTotVal = 0
       let totVal = 0
       let check = 0
       for (let i = 0; i < this.tokenList.length; i++) {
@@ -350,11 +351,12 @@ export default Vue.extend({
               //@ts-ignore
               this.SOL5Balances[this.tokenList[i]] = Number((Number(result) / 1e8).toString())
               //@ts-ignore
-              totVal += (this.SOL5Balances[this.tokenList[i]] * (((this.SOL5Balances.SOL5 / 100) / this.etfSupply)) * this.prices[this.tokenList[i]])
+              yourTotVal += (this.SOL5Balances[this.tokenList[i]] * (((this.SOL5Balances.SOL5 / 100) / this.etfSupply)) * this.prices[this.tokenList[i]])
+              totVal += Number((Number(result) / 1e8)) * this.prices[this.tokenList[i]]
               check++
               if (check === this.tokenList.length * 5) {
-                this.ETFValue = totVal
-                this.sol5Value = this.ETFValue / (this.SOL5Balances.SOL5 / this.etfSupply / 100)
+                this.ETFValue = yourTotVal
+                this.sol5Value = totVal
               }
             })
           }
