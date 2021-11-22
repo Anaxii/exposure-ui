@@ -36,12 +36,12 @@
 
       </div>
       <div v-else style="width: 275px !important; justify-content: space-between;display: flex;align-items: center;flex-direction: unset;">
-        <p v-if="this.$route.fullPath === '/portfolio' || this.$route.fullPath === '/portfolio/'" class="antihighlight">
-          Portfolio
-        </p>
-        <p class="highlight" v-else @click="nav('/portfolio')">
-          Portfolio
-        </p>
+<!--        <p v-if="this.$route.fullPath === '/portfolio' || this.$route.fullPath === '/portfolio/'" class="antihighlight">-->
+<!--          Portfolio-->
+<!--        </p>-->
+<!--        <p class="highlight" v-else @click="nav('/portfolio')">-->
+<!--          Portfolio-->
+<!--        </p>-->
         <!--        <p v-if="this.$route.fullPath == '/stats' || this.$route.fullPath == '/stats/'" class="antihighlight">ETF Stats</p>-->
         <!--        <p class="highlight" v-else style="display: inline;color: rgb(166 166 166);cursor: pointer" @click="nav('/stats')">-->
         <!--          ETF Stats</p>-->
